@@ -7,6 +7,9 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+# next.js build output
+.next
+
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
@@ -73,6 +76,7 @@ web_modules/
 .env
 .env.test
 .env.production
+.env.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
