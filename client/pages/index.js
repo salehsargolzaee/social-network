@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { UserContext } from "../context/index";
+
 function Home() {
+  const { state, setState } = useContext(UserContext);
+
   return (
     <div className="container">
       <div className="row">

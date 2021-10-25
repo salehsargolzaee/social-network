@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import Link from "next/link";
 import AuthForm from "../components/forms/AuthForm";
+import { UserContext } from "../context";
+import { useRouter } from "next/router";
 
 function Register() {
   const [userInformation, setUserInformation] = useState({
@@ -12,8 +14,12 @@ function Register() {
     password: "",
     answer: "",
   });
+  // ok shows if is it ok to display modal or not
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const { state: loggedUser } = useContext(UserContext);
+  const router = useRouter();
 
   const handleChange = (event) => {
     const { name: inputType, value } = event.target;
@@ -52,14 +58,18 @@ function Register() {
     return false;
   };
 
+  if (loggedUser && loggedUser.token) {
+    router.push("/");
+  }
+
   return (
-    <div className="container-fluid container-custom-color">
+    <div className="container-fluid container-custom">
       <div className="row bg-default-image py-5 text-ligth box-shadow">
         <div className="col text-center">
           <h1 style={{ color: "#4A6984" }}>Register</h1>
         </div>
       </div>
-      <div className="row py-5">
+      <div className="row pt-5 pb-3">
         <div className="col-md-6 offset-md-3">
           <AuthForm
             userInformation={userInformation}
@@ -67,6 +77,7 @@ function Register() {
             handleChange={handleChange}
             handleDisable={handleDisable}
             loading={loading}
+            registerPage={true}
           />
         </div>
       </div>
@@ -83,6 +94,16 @@ function Register() {
               <button className="btn btn-primary btn-sm">Login</button>
             </Link>
           </Modal>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <p className="text-center">
+            Already registered?{" "}
+            <Link href="/login">
+              <a>Login</a>
+            </Link>
+          </p>
         </div>
       </div>
     </div>

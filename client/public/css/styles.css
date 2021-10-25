@@ -1,3 +1,12 @@
+h1,
+h2,
+h3,
+body,
+.css-1juivf6-MuiTypography-root {
+  font-family: "Comfortaa", sans-serif !important;
+  font-weight: 500 !important;
+}
+
 img {
   width: 500px;
 }
@@ -8,8 +17,8 @@ img {
 
 /* .row .form-control {
   border: none;
-  border-bottom: 1px solid #f1f1f1;
-  border-top: 1px solid #f1f1f1;
+  border-bottom: 1px solid;
+   border-top: 1px solid; 
 } */
 
 ::placeholder {
@@ -17,25 +26,36 @@ img {
 }
 
 .bg-default-image {
-  background-image: url("/images/default.jpg");
-  background-size: 100%;
+  background: linear-gradient(
+      rgba(176, 204, 246, 0.4),
+      rgba(138, 138, 138, 0.1)
+    ),
+    url("/images/default.jpg");
+  /* background-image: url("/images/default.jpg"); */
+  background-size: cover;
   height: 220px;
   text-shadow: 2px 2px 9px #ffffff;
   background-position-y: 80%;
 }
 
-.container-custom-color {
+.container-custom {
+  background-color: #f4f6f7;
+  min-height: 100vh;
+}
+
+.container-custom input {
   background-color: #f4f6f7;
 }
 
-.container-custom-color input {
-  background-color: #f4f6f7;
-}
-
-.container-custom-color select {
+.container-custom select {
   background-color: #f4f6f7;
 }
 
 .box-shadow {
   box-shadow: 1px 2px 7px #6395b0;
+}
+
+.active {
+  background-color: #0360b8;
+  box-shadow: 0 -2px 4px #013362;
 }
