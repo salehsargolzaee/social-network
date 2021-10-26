@@ -11,14 +11,7 @@ function UserRoute({ children }) {
 
   const checkCurrentUser = async () => {
     try {
-      const { data } = await axios.get(
-        `${process.env.NEXT_PUBLIC_API}/current-user`,
-        {
-          headers: {
-            Authorization: `Bearer ${loggedUser.token}`,
-          },
-        }
-      );
+      const { data } = await axios.get(`/current-user`);
       if (data.ok) {
         setLoginOk(true);
       }

@@ -29,10 +29,7 @@ function Login() {
     // console.log(userInformation);
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API}/login`,
-        userInformation
-      );
+      const { data } = await axios.post(`/login`, userInformation);
       setUserInformation({
         email: "",
         password: "",

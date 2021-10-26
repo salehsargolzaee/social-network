@@ -14,6 +14,12 @@ function UserProvider({ children }) {
     setState(JSON.parse(window.localStorage.getItem("auth")));
   }, []);
 
+  // axios configuration
+  const token = state && state.token ? state.token : "";
+  axios.defaults.baseURL = process.env.NEXT_PUBLIC_API;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+  // axios interceptors for token expiration
   axios.interceptors.response.use(
     function (response) {
       return response;

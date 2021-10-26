@@ -33,10 +33,7 @@ function Register() {
     // console.log(userInformation);
     try {
       setLoading(true);
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API}/register`,
-        userInformation
-      );
+      const { data } = await axios.post(`/register`, userInformation);
       setUserInformation({
         name: "",
         email: "",
