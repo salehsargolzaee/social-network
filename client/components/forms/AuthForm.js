@@ -46,7 +46,7 @@ function AuthForm({
           onChange={handleChange}
           type="password"
           className="form-control"
-          placeholder="Enter your name"
+          placeholder="Enter your password"
           autoComplete={autoComp}
         />
       </div>
@@ -56,7 +56,12 @@ function AuthForm({
             <label className="mb-2 text-muted form-label">
               Please answer one of the following questions.
             </label>
-            <select className="form-control">
+            <select
+              className="form-control"
+              name="question"
+              onChange={handleChange}
+              value={userInformation.question}
+            >
               <option>What is your best friend's name ?</option>
               <option>What is your favourite book ?</option>
               <option>What is your lucky number ?</option>

@@ -3,17 +3,17 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Modal } from "antd";
 import Link from "next/link";
-import AuthForm from "../components/forms/AuthForm";
 import { UserContext } from "../context";
 import { useRouter } from "next/router";
+import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
 
-function Register() {
+function ForgotPassword() {
+  const [email, setEmail] = useState("");
   const [userInformation, setUserInformation] = useState({
-    name: "",
-    email: "",
-    password: "",
-    question: "What is your best friend's name ?",
+    _id: "",
+    question: "",
     answer: "",
+    newPassword: "",
   });
   // ok shows if is it ok to display modal or not
   const [ok, setOk] = useState(false);
@@ -24,36 +24,50 @@ function Register() {
 
   const handleChange = (event) => {
     const { name: inputType, value } = event.target;
-    setUserInformation((prev) => {
-      return { ...prev, [inputType]: value };
-    });
+    if (inputType === "email") {
+      setEmail(value);
+    } else {
+      setUserInformation((prev) => {
+        return { ...prev, [inputType]: value };
+      });
+    }
   };
-
-  const handleSubmit = async (event) => {
+  const handleSubmitEmail = async (event) => {
     event.preventDefault();
-    // console.log(userInformation);
     try {
       setLoading(true);
-      const { data } = await axios.post(`/register`, userInformation);
-      setUserInformation({
-        name: "",
-        email: "",
-        password: "",
-        answer: "",
-      });
+      const {
+        data: { question, _id },
+      } = await axios.post("/find-question", { email });
       setLoading(false);
-      setOk(data.ok);
+      setEmail("");
+      setUserInformation((prev) => ({
+        ...prev,
+        question,
+        _id,
+      }));
     } catch (error) {
       setLoading(false);
       toast.error(error.response.data);
     }
   };
-
-  const handleDisable = () => {
-    for (const key in userInformation) {
-      if (!userInformation[key]) return true;
+  const handleSubmitAnswer = async (event) => {
+    event.preventDefault();
+    try {
+      setLoading(true);
+      const { data } = await axios.post(`/forgot-password`, userInformation);
+      setLoading(false);
+      setOk(data.ok);
+      setUserInformation({
+        _id: "",
+        question: "",
+        answer: "",
+        newPassword: "",
+      });
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.response.data);
     }
-    return false;
   };
 
   if (loggedUser && loggedUser.token) {
@@ -64,48 +78,41 @@ function Register() {
     <div className="container-fluid container-custom">
       <div className="row bg-default-image py-5 text-ligth box-shadow">
         <div className="col text-center">
-          <h1 style={{ color: "#4A6984" }}>Register</h1>
+          <h1 style={{ color: "#4A6984" }}>Change Password</h1>
         </div>
       </div>
       <div className="row pt-5 pb-3">
         <div className="col-md-6 offset-md-3">
-          <AuthForm
+          <ForgotPasswordForm
             userInformation={userInformation}
-            handleSubmit={handleSubmit}
+            email={email}
+            handleSubmitAnswer={handleSubmitAnswer}
+            handleSubmitEmail={handleSubmitEmail}
             handleChange={handleChange}
-            handleDisable={handleDisable}
             loading={loading}
-            registerPage={true}
           />
         </div>
       </div>
       <div className="row">
         <div className="col">
           <Modal
-            title="Thank you!"
+            title="Changed Successfully!"
             visible={ok}
             onCancel={() => setOk(false)}
             footer={null}
           >
-            <p>You have successfully registered.</p>
+            <p>
+              You have successfully changed the password. You can login with
+              your new password.
+            </p>
             <Link href="/login">
               <button className="btn btn-primary btn-sm">Login</button>
             </Link>
           </Modal>
         </div>
       </div>
-      <div className="row">
-        <div className="col">
-          <p className="text-center">
-            Already registered?{" "}
-            <Link href="/login">
-              <a>Login</a>
-            </Link>
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
 
-export default Register;
+export default ForgotPassword;

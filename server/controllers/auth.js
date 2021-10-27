@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 exports.register = async (req, res) => {
   // console.log(req.body);
-  const { name, email, password, answer } = req.body;
+  const { name, email, password, question, answer } = req.body;
 
   // Information validation
   if (!name) {
@@ -30,12 +30,16 @@ exports.register = async (req, res) => {
   // Hash the password
   const hashedPassword = await hashPassword(password);
 
+  // Hash answer for changing password
+  const hashedAnswer = await hashPassword(answer.trim().toLowerCase());
+
   // Create new user
   const user = new User({
     name,
     email,
     password: hashedPassword,
-    answer,
+    question,
+    answer: hashedAnswer,
   });
 
   await user.save((err) => {
@@ -75,6 +79,7 @@ exports.login = async (req, res) => {
     // make sure we dons't sednn user's password and answer
     user.password = undefined;
     user.answer = undefined;
+    user.question = undefined;
 
     res.json({
       token,
@@ -95,5 +100,65 @@ exports.currentUser = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.sendStatus(400);
+  }
+};
+
+exports.findQuestion = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).send("Invalid email address");
+    }
+
+    res.json({ question: user.question, _id: user._id });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};
+
+exports.forgotPassword = async (req, res) => {
+  try {
+    const { answer, newPassword, _id } = req.body;
+
+    const user = await User.findById(_id);
+
+    const isAnswerMatch = await isPasswordTrue(
+      answer.trim().toLowerCase(),
+      user.answer
+    );
+
+    if (!isAnswerMatch) {
+      return res.status(400).send("Wrong answer");
+    }
+
+    if (!newPassword || newPassword.length < 6 || newPassword.length > 64) {
+      return res
+        .status(400)
+        .send(
+          "Password is required and should be between 6 and 64 characters long."
+        );
+    }
+
+    // Hash the new password
+    const hashedPassword = await hashPassword(newPassword);
+
+    const response = await User.updateOne(
+      { _id },
+      { password: hashedPassword }
+    );
+
+    // console.log(response.modifiedCount);
+    if (response.modifiedCount !== 1) {
+      return res.status(400).send("An error happened. Please try again");
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
   }
 };
