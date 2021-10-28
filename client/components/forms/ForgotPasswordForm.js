@@ -58,7 +58,9 @@ function ForgotPasswordForm({
         </>
       )}
       <button
-        disabled={findQuestion ? !userInformation.answer : !email}
+        disabled={
+          findQuestion ? !userInformation.answer || loading : !email || loading
+        }
         className="btn btn-primary btn-block col-12"
       >
         {loading ? (

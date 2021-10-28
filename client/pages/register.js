@@ -50,6 +50,7 @@ function Register() {
   };
 
   const handleDisable = () => {
+    if (loading) return true;
     for (const key in userInformation) {
       if (!userInformation[key]) return true;
     }

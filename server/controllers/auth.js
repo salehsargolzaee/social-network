@@ -27,6 +27,10 @@ exports.register = async (req, res) => {
     return res.status(400).send("Email address already exists.");
   }
 
+  if (!email) {
+    return res.status(400).send("Email is required");
+  }
+
   // Hash the password
   const hashedPassword = await hashPassword(password);
 
@@ -104,9 +108,12 @@ exports.currentUser = async (req, res) => {
 };
 
 exports.findQuestion = async (req, res) => {
-  try {
-    const { email } = req.body;
+  const { email } = req.body;
 
+  if (!email) {
+    return res.status(400).send("Email is required");
+  }
+  try {
     const user = await User.findOne({ email });
 
     if (!user) {
@@ -121,9 +128,13 @@ exports.findQuestion = async (req, res) => {
 };
 
 exports.forgotPassword = async (req, res) => {
-  try {
-    const { answer, newPassword, _id } = req.body;
+  const { answer, newPassword, _id } = req.body;
 
+  if (!answer) {
+    return res.status(400).send("Answer is required");
+  }
+
+  try {
     const user = await User.findById(_id);
 
     const isAnswerMatch = await isPasswordTrue(

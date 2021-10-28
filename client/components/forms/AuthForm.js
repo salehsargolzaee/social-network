@@ -64,7 +64,7 @@ function AuthForm({
             >
               <option>What is your best friend's name ?</option>
               <option>What is your favourite book ?</option>
-              <option>What is your lucky number ?</option>
+              <option>What is the name of your favourite city ?</option>
             </select>
             <small className="form-text text-muted">
               You can answer this question to reset your password if forgotten.
