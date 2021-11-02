@@ -7,10 +7,10 @@ function Dashboard() {
 
   return (
     <UserRoute>
-      <div className="container">
-        <div className="row">
+      <div className="container-fluid">
+        <div className="row py-5">
           <div className="col">
-            <h1 className="display-1 text-center py-5">dashboard page</h1>
+            <h1 className="display-1 text-center">dashboard page</h1>
           </div>
         </div>
       </div>

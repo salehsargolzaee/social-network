@@ -21,8 +21,14 @@ function UserRoute({ children }) {
   };
 
   useEffect(() => {
-    checkCurrentUser();
+    if (loggedUser && loggedUser.token) checkCurrentUser();
   }, [loggedUser && loggedUser.token]);
+
+  process.browser &&
+    !loggedUser &&
+    setTimeout(() => {
+      router.push("/login");
+    }, 1000);
 
   return loginOk ? (
     <>{children}</>
