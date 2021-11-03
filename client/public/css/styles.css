@@ -59,3 +59,7 @@ img {
   background-color: #0360b8;
   box-shadow: 0 -2px 4px #013362;
 }
+
+.ql-editor {
+  min-height: 100px;
+}
