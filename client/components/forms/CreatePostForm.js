@@ -1,10 +1,13 @@
 import { Avatar } from "antd";
+import { CameraFilled } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 
 // should import it dynamically because next works both on
 //client and server side and quill is only on client side
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
+
+const regex = /(<([^>]+)>)/gi;
 
 function CreatePostForm({ postContent, setPostContent, handlePostSubmit }) {
   return (
@@ -19,11 +22,12 @@ function CreatePostForm({ postContent, setPostContent, handlePostSubmit }) {
           />
         </form>
       </div>
+
       <div className="card-footer">
         <button
           className="btn btn-primary btn-sm"
           onClick={handlePostSubmit}
-          disabled={!postContent.length}
+          disabled={!postContent.replace(regex, "").length}
         >
           Post it!
         </button>

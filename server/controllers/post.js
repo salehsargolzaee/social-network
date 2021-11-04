@@ -1,9 +1,10 @@
 const Post = require("../models/post");
+const regex = /(<([^>]+)>)/gi;
 
 exports.createPost = async (req, res) => {
   const { postContent } = req.body;
 
-  if (!postContent.length) {
+  if (!postContent.replace(regex, "").length) {
     return res.status(400).send("Please write something");
   }
 
