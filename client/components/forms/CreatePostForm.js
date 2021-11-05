@@ -1,5 +1,5 @@
 import { Avatar } from "antd";
-import { CameraFilled } from "@ant-design/icons";
+import { CameraFilled, LoadingOutlined } from "@ant-design/icons";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 
@@ -9,7 +9,14 @@ const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const regex = /(<([^>]+)>)/gi;
 
-function CreatePostForm({ postContent, setPostContent, handlePostSubmit }) {
+function CreatePostForm({
+  postContent,
+  setPostContent,
+  handlePostSubmit,
+  handleImageUpload,
+  isLoading,
+  postImage,
+}) {
   return (
     <div className="card">
       <div className="card-body">
@@ -23,7 +30,7 @@ function CreatePostForm({ postContent, setPostContent, handlePostSubmit }) {
         </form>
       </div>
 
-      <div className="card-footer">
+      <div className="card-footer d-flex justify-content-between text-muted">
         <button
           className="btn btn-primary btn-sm"
           onClick={handlePostSubmit}
@@ -31,6 +38,23 @@ function CreatePostForm({ postContent, setPostContent, handlePostSubmit }) {
         >
           Post it!
         </button>
+        <label>
+          {isLoading ? (
+            <LoadingOutlined />
+          ) : postImage && postImage.url ? (
+            <Avatar src={postImage.url} />
+          ) : (
+            <CameraFilled
+              style={{ fontSize: "21px", marginTop: "50%", marginRight: "20%" }}
+            />
+          )}
+          <input
+            onChange={handleImageUpload}
+            type="file"
+            accept="image/*"
+            hidden
+          />
+        </label>
       </div>
     </div>
   );

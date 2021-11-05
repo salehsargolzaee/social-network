@@ -10,6 +10,10 @@ function Dashboard() {
   const { state: loggedUser } = useContext(UserContext);
 
   const [postContent, setPostContent] = useState("");
+  const [postImage, setPostImage] = useState({});
+
+  // loading spinner for image uploading delay
+  const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
 
@@ -18,12 +22,33 @@ function Dashboard() {
     try {
       const { data } = await axios.post("/create-post", {
         postContent,
+        postImage,
       });
       console.log("Post creation response => ", data);
       toast.success("Successfully created the post.");
       setPostContent("");
+      setPostImage({});
     } catch (error) {
       toast.error(error.response.data);
+    }
+  };
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("image", file);
+    // console.log([...formData]);
+
+    setIsLoading(true);
+    try {
+      const { data } = await axios.post("/upload-image", formData);
+      console.log("Uploaded image data => ", data);
+      setPostImage({ url: data.url, public_id: data.public_id });
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -43,6 +68,9 @@ function Dashboard() {
               postContent={postContent}
               setPostContent={setPostContent}
               handlePostSubmit={handlePostSubmit}
+              handleImageUpload={handleImageUpload}
+              isLoading={isLoading}
+              postImage={postImage}
             />
           </div>
           <div className="col-md-4">SideBar</div>
