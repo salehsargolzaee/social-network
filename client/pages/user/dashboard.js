@@ -1,21 +1,37 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context";
 import UserRoute from "../../components/routes/UserRoute";
 import CreatePostForm from "../../components/forms/CreatePostForm";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
+import PostList from "../../components/cards/PostList";
 
 function Dashboard() {
   const { state: loggedUser } = useContext(UserContext);
 
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState({});
+  const [userPosts, setUserPosts] = useState([]);
 
   // loading spinner for image uploading delay
   const [isLoading, setIsLoading] = useState(false);
 
   const router = useRouter();
+
+  const fetchUserPosts = async () => {
+    try {
+      const { data } = await axios.get("/user-posts");
+      setUserPosts(data);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data);
+    }
+  };
+
+  useEffect(() => {
+    if (loggedUser && loggedUser.token) fetchUserPosts();
+  }, [loggedUser && loggedUser.token]);
 
   const handlePostSubmit = async (event) => {
     event.preventDefault();
@@ -28,6 +44,7 @@ function Dashboard() {
       toast.success("Successfully created the post.");
       setPostContent("");
       setPostImage({});
+      fetchUserPosts();
     } catch (error) {
       toast.error(error.response.data);
     }
@@ -58,7 +75,9 @@ function Dashboard() {
         <div className="row bg-default-image py-5 text-ligth box-shadow">
           <div className="col text-center">
             <h1 style={{ color: "#4A6984" }}>
-              Welcome Back, {loggedUser.user["name"]}
+              {loggedUser &&
+                loggedUser.user &&
+                `Welcome Back, ${loggedUser.user["name"]}`}
             </h1>
           </div>
         </div>
@@ -72,7 +91,9 @@ function Dashboard() {
               isLoading={isLoading}
               postImage={postImage}
             />
+            <PostList posts={userPosts} />
           </div>
+          {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">SideBar</div>
         </div>
       </div>
