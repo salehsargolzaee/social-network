@@ -11,9 +11,11 @@ import {
 } from "@ant-design/icons";
 import { useContext } from "react";
 import { UserContext } from "../../context";
+import { useRouter } from "next/router";
 
 function PostList({ posts }) {
   const { state: loggedUser } = useContext(UserContext);
+  const router = useRouter();
   return (
     <>
       {posts &&
@@ -49,7 +51,10 @@ function PostList({ posts }) {
                   loggedUser.user &&
                   loggedUser.user._id == post.postedBy._id && (
                     <span>
-                      <EditOutlined className="h5" />
+                      <EditOutlined
+                        onClick={() => router.push(`/user/post/${post._id}`)}
+                        className="h5"
+                      />
                       <DeleteOutlined className="ms-3 h5" />
                     </span>
                   )}

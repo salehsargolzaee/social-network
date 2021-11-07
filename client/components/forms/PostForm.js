@@ -19,7 +19,7 @@ function CreatePostForm({
 }) {
   return (
     <div className="card">
-      <div className="card-body">
+      <div className="card-body ">
         <form>
           <ReactQuill
             theme="snow"

@@ -59,3 +59,32 @@ exports.userPosts = async (req, res) => {
     res.status(400).send("Posts can't be rendered.");
   }
 };
+
+exports.getUserPostById = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    res.json(post);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};
+
+exports.updatePost = async (req, res) => {
+  // console.log("post update controller=>", req.body);
+  const { postContent: content, postImage: image } = req.body;
+  try {
+    const response = await Post.updateOne(
+      { _id: req.params.id },
+      { content, image }
+    );
+    console.log("response to update =>", response);
+    if (response.modifiedCount !== 1) {
+      return res.status(400).send("An error happened. Please try again");
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};

@@ -63,3 +63,7 @@ img {
 .ql-editor {
   min-height: 100px;
 }
+
+.ql-bigger .ql-editor {
+  min-height: 40vh;
+}

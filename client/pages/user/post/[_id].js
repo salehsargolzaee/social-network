@@ -1,28 +1,33 @@
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "../../context";
-import UserRoute from "../../components/routes/UserRoute";
-import PostForm from "../../components/forms/PostForm";
 import { useRouter } from "next/router";
+import { useEffect, useState, useContext } from "react";
+import { UserContext } from "../../../context";
 import axios from "axios";
 import { toast } from "react-toastify";
-import PostList from "../../components/cards/PostList";
+import PostForm from "../../../components/forms/PostForm";
+import UserRoute from "../../../components/routes/UserRoute";
 
-function Dashboard() {
-  const { state: loggedUser } = useContext(UserContext);
+function EditPost() {
+  const router = useRouter();
+  const [post, setPost] = useState({});
 
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState({});
-  const [userPosts, setUserPosts] = useState([]);
+  const { state: loggedUser } = useContext(UserContext);
 
   // loading spinner for image uploading delay
   const [isLoading, setIsLoading] = useState(false);
 
-  const router = useRouter();
+  //   console.log("router => ", router);
 
-  const fetchUserPosts = async () => {
+  // We can access _id from router.query.[name inside bracket in filename]
+  const _id = router.query._id;
+
+  const fetchPost = async () => {
     try {
-      const { data } = await axios.get("/user-posts");
-      setUserPosts(data);
+      const { data } = await axios.get(`/user-post/${_id}`);
+      setPost(data);
+      setPostImage(data.image);
+      setPostContent(data.content);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data);
@@ -30,22 +35,24 @@ function Dashboard() {
   };
 
   useEffect(() => {
-    if (loggedUser && loggedUser.token) fetchUserPosts();
-  }, [loggedUser && loggedUser.token]);
+    if (_id && loggedUser && loggedUser.token) fetchPost();
+  }, [_id && loggedUser && loggedUser.token]);
 
   const handlePostSubmit = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("/create-post", {
+      const { data } = await axios.put(`/update-post/${_id}`, {
         postContent,
         postImage,
       });
-      console.log("Post creation response => ", data);
-      toast.success("Successfully created the post.");
-      setPostContent("");
-      setPostImage({});
-      fetchUserPosts();
+      if (data.err) {
+        toast.error(data.err);
+      } else {
+        toast.success("Successfully updated the post.");
+      }
+      router.push("/user/dashboard");
     } catch (error) {
+      console.log(error);
       toast.error(error.response.data);
     }
   };
@@ -55,34 +62,26 @@ function Dashboard() {
     if (!file) return;
     const formData = new FormData();
     formData.append("image", file);
-    // console.log([...formData]);
-
     setIsLoading(true);
     try {
       const { data } = await axios.post("/upload-image", formData);
-      console.log("Uploaded image data => ", data);
       setPostImage({ url: data.url, public_id: data.public_id });
       setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      toast.error(error.response.data);
       setIsLoading(false);
     }
   };
-
   return (
     <UserRoute>
       <div className="container-fluid container-custom">
         <div className="row bg-default-image py-5 text-ligth box-shadow">
           <div className="col text-center">
-            <h1 style={{ color: "#4A6984" }}>
-              {loggedUser &&
-                loggedUser.user &&
-                `Welcome Back, ${loggedUser.user["name"]}`}
-            </h1>
+            <h1 style={{ color: "#4A6984" }}>Edit</h1>
           </div>
         </div>
-        <div className="row py-3">
-          <div className="col-md-8">
+        <div className="row py-5">
+          <div className="col-md-8 offset-md-2 ql-bigger">
             <PostForm
               postContent={postContent}
               setPostContent={setPostContent}
@@ -91,14 +90,11 @@ function Dashboard() {
               isLoading={isLoading}
               postImage={postImage}
             />
-            <PostList posts={userPosts} />
           </div>
-          {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
-          <div className="col-md-4">SideBar</div>
         </div>
       </div>
     </UserRoute>
   );
 }
 
-export default Dashboard;
+export default EditPost;

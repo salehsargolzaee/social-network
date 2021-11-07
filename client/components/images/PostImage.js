@@ -6,9 +6,7 @@ function PostImage({ src }) {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
         backgroundSize: "cover",
-        textAlign: "center",
         height: "500px",
-        margin: "auto",
       }}
     />
   );

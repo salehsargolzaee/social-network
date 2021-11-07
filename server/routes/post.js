@@ -2,10 +2,16 @@ const express = require("express");
 const formidable = require("express-formidable");
 
 //controllers
-const { createPost, uploadImage, userPosts } = require("../controllers/post");
+const {
+  createPost,
+  uploadImage,
+  userPosts,
+  getUserPostById,
+  updatePost,
+} = require("../controllers/post");
 
 //middlewares
-const { requireSignin } = require("../middlewares");
+const { requireSignin, canModifyPost } = require("../middlewares");
 
 const router = express.Router();
 
@@ -18,5 +24,11 @@ router.post(
 );
 
 router.get("/user-posts", requireSignin, userPosts);
+router.get("/user-post/:id", requireSignin, getUserPostById);
+
+// canModifyPost is a middleware which makes sure
+// user is trying to edit or delete his/her own post not others
+
+router.put("/update-post/:id", requireSignin, canModifyPost, updatePost);
 
 module.exports = router;
