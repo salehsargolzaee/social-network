@@ -13,7 +13,7 @@ import { useContext } from "react";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
 
-function PostList({ posts }) {
+function PostList({ posts, setShowDeleteModal }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
   return (
@@ -55,7 +55,10 @@ function PostList({ posts }) {
                         onClick={() => router.push(`/user/post/${post._id}`)}
                         className="h5"
                       />
-                      <DeleteOutlined className="ms-3 h5" />
+                      <DeleteOutlined
+                        onClick={() => setShowDeleteModal(post._id)}
+                        className="ms-3 h5"
+                      />
                     </span>
                   )}
               </div>

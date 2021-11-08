@@ -8,6 +8,7 @@ const {
   userPosts,
   getUserPostById,
   updatePost,
+  deletePost,
 } = require("../controllers/post");
 
 //middlewares
@@ -30,5 +31,7 @@ router.get("/user-post/:id", requireSignin, getUserPostById);
 // user is trying to edit or delete his/her own post not others
 
 router.put("/update-post/:id", requireSignin, canModifyPost, updatePost);
+
+router.delete("/delete-post/:id", requireSignin, canModifyPost, deletePost);
 
 module.exports = router;

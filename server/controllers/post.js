@@ -74,13 +74,32 @@ exports.updatePost = async (req, res) => {
   // console.log("post update controller=>", req.body);
   const { postContent: content, postImage: image } = req.body;
   try {
-    const response = await Post.updateOne(
-      { _id: req.params.id },
-      { content, image }
-    );
-    console.log("response to update =>", response);
-    if (response.modifiedCount !== 1) {
+    const post = await Post.findByIdAndUpdate(req.params.id, {
+      content,
+      image,
+    });
+    console.log("post before update =>", post);
+    if (!post) {
       return res.status(400).send("An error happened. Please try again");
+    }
+    // delete image from cloudinary
+    if (post.image && post.image.public_id && post.image.url !== image.url) {
+      await cloudinary.uploader.destroy(post.image.public_id);
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};
+
+exports.deletePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndDelete(req.params.id);
+
+    // delete image from cloudinary
+    if (post.image && post.image.public_id) {
+      await cloudinary.uploader.destroy(post.image.public_id);
     }
     res.json({ ok: true });
   } catch (err) {

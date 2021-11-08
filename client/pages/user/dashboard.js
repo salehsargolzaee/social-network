@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import PostList from "../../components/cards/PostList";
+import { Modal } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 function Dashboard() {
   const { state: loggedUser } = useContext(UserContext);
@@ -14,18 +16,27 @@ function Dashboard() {
   const [postImage, setPostImage] = useState({});
   const [userPosts, setUserPosts] = useState([]);
 
+  // if modal showing the value of this state will be _id of target post
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   // loading spinner for image uploading delay
   const [isLoading, setIsLoading] = useState(false);
+
+  // loading spinner for post fetching delay
+  const [isLoadingPosts, setIsLoadingPosts] = useState(false);
 
   const router = useRouter();
 
   const fetchUserPosts = async () => {
+    setIsLoadingPosts(true);
     try {
       const { data } = await axios.get("/user-posts");
       setUserPosts(data);
+      setIsLoadingPosts(false);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data);
+      setIsLoadingPosts(false);
     }
   };
 
@@ -69,6 +80,17 @@ function Dashboard() {
     }
   };
 
+  const handlePostDelete = async (id) => {
+    setShowDeleteModal(false);
+    try {
+      const { data } = await axios.delete(`/delete-post/${id}`);
+      if (loggedUser && loggedUser.token) fetchUserPosts();
+      toast.success("Successfully deleted the post.");
+    } catch (error) {
+      console.log("error in post deletion =>", error);
+    }
+  };
+
   return (
     <UserRoute>
       <div className="container-fluid container-custom">
@@ -91,10 +113,37 @@ function Dashboard() {
               isLoading={isLoading}
               postImage={postImage}
             />
-            <PostList posts={userPosts} />
+            {isLoadingPosts ? (
+              <LoadingOutlined className="d-flex justify-content-center display-1 p-5 text-primary" />
+            ) : (
+              <PostList
+                posts={userPosts}
+                setShowDeleteModal={setShowDeleteModal}
+              />
+            )}
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">SideBar</div>
+        </div>
+        <div className="row">
+          <div className="col">
+            <Modal
+              title="Warning!"
+              visible={showDeleteModal}
+              onCancel={() => setShowDeleteModal(false)}
+              onOk={() => handlePostDelete(showDeleteModal)}
+              okButtonProps={{ type: "danger" }}
+              okText="Delete"
+            >
+              <h2> Are you sure?</h2>
+              <p>
+                <strong>
+                  Do you really want to delete this post? This process cannot be
+                  undone.
+                </strong>
+              </p>
+            </Modal>
+          </div>
         </div>
       </div>
     </UserRoute>

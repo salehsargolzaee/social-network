@@ -34,7 +34,7 @@ function CreatePostForm({
         <button
           className="btn btn-primary btn-sm"
           onClick={handlePostSubmit}
-          disabled={!postContent.replace(regex, "").length}
+          disabled={!postContent.replace(regex, "").length || isLoading}
         >
           Post it!
         </button>
