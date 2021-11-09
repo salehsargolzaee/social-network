@@ -67,3 +67,8 @@ img {
 .ql-bigger .ql-editor {
   min-height: 40vh;
 }
+
+/* material ui change */
+.css-sghohy-MuiButtonBase-root-MuiButton-root {
+  box-shadow: 0 0 0;
+}

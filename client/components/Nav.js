@@ -8,6 +8,7 @@ import Link from "next/link";
 import { UserContext } from "../context/index";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import MenuPopupState from "./MenuPopupState";
 
 function Nav() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -30,21 +31,18 @@ function Nav() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="primary">
         <Toolbar variant="dense">
-          <Link href="/">
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1 }}
-              style={{ cursor: "pointer" }}
-            >
-              Main Logo
-            </Typography>
-          </Link>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            <Link href="/">
+              <span style={{ cursor: "pointer" }}> Main Logo</span>
+            </Link>
+          </Typography>
+
           <Link href="/">
             <Button color="inherit" className={currentPage === "/" && "active"}>
               Home
             </Button>
           </Link>
+
           {!loggedUser ? (
             <>
               <Link href="/login">
@@ -67,17 +65,22 @@ function Nav() {
             </>
           ) : (
             <>
-              <Link href="/user/dashboard">
+              {/* <Link href="/user/dashboard">
                 <Button
                   color="inherit"
                   className={currentPage === "/user/dashboard" && "active"}
                 >
-                  {loggedUser.user && loggedUser.user["name"]}
+                  {loggedUser && loggedUser.user && loggedUser.user["name"]}
                 </Button>
               </Link>
               <Button onClick={handleLogout} color="inherit">
                 Logout
-              </Button>
+              </Button> */}
+              <MenuPopupState
+                name={loggedUser && loggedUser.user && loggedUser.user["name"]}
+                handleLogout={handleLogout}
+                currentPage={currentPage}
+              />
             </>
           )}
         </Toolbar>
