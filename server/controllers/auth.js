@@ -1,6 +1,7 @@
 const { isPasswordTrue, hashPassword } = require("../helpers/auth");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { nanoid } = require("nanoid");
 
 exports.register = async (req, res) => {
   // console.log(req.body);
@@ -44,6 +45,7 @@ exports.register = async (req, res) => {
     password: hashedPassword,
     question,
     answer: hashedAnswer,
+    username: nanoid(6),
   });
 
   await user.save((err) => {
@@ -98,7 +100,9 @@ exports.login = async (req, res) => {
 exports.currentUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-
+    if (!user) {
+      return res.sendStatus(401);
+    }
     // res.json(user);
     res.json({ ok: true });
   } catch (err) {

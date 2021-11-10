@@ -60,6 +60,13 @@ img {
   box-shadow: 0 -2px 4px #013362;
 }
 
+.active-popup {
+  background: linear-gradient(
+    rgba(185, 200, 215, 0.3),
+    rgba(87, 106, 136, 0.1)
+  );
+}
+
 .ql-editor {
   min-height: 100px;
 }

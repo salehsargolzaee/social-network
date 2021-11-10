@@ -26,9 +26,8 @@ export default function MenuPopupState({ name, handleLogout, currentPage }) {
           <Menu {...bindMenu(popupState)}>
             <Link href="/user/dashboard">
               <MenuItem
-                onClick={() => {
-                  popupState.close;
-                }}
+                onClick={popupState.close}
+                className={currentPage === "/user/dashboard" && "active-popup"}
               >
                 Dashboard
               </MenuItem>
