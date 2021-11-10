@@ -24,6 +24,16 @@ export default function MenuPopupState({ name, handleLogout, currentPage }) {
             {name} <KeyboardArrowDownIcon />
           </Button>
           <Menu {...bindMenu(popupState)}>
+            <Link href="/user/profile/update">
+              <MenuItem
+                onClick={popupState.close}
+                className={
+                  currentPage === "/user/profile/update" && "active-popup"
+                }
+              >
+                Profile
+              </MenuItem>
+            </Link>
             <Link href="/user/dashboard">
               <MenuItem
                 onClick={popupState.close}

@@ -8,11 +8,40 @@ function AuthForm({
   handleChange,
   handleDisable,
   loading,
-  registerPage,
+  pageKind,
 }) {
   return (
     <form onSubmit={handleSubmit}>
-      {registerPage && (
+      {pageKind === "profile" && (
+        <>
+          <div className="mb-3">
+            <label className="text-muted form-label">Username</label>
+            <input
+              name="username"
+              value={userInformation.username}
+              onChange={handleChange}
+              type="text"
+              className="form-control"
+              placeholder="Enter your username"
+              autoComplete={autoComp}
+            />
+          </div>
+          <div className="mb-3">
+            <label className="text-muted form-label">About</label>
+            <input
+              name="about"
+              value={userInformation.about}
+              onChange={handleChange}
+              type="text"
+              className="form-control"
+              placeholder="Tell us about yourself"
+              autoComplete={autoComp}
+            />
+          </div>
+        </>
+      )}
+
+      {pageKind !== "login" && (
         <div className="mb-3">
           <label className="text-muted form-label">Your name</label>
           <input
@@ -26,7 +55,7 @@ function AuthForm({
           />
         </div>
       )}
-      <div className={registerPage ? "mb-3" : "my-3"}>
+      <div className={pageKind !== "login" ? "mb-3" : "my-3"}>
         <label className="text-muted form-label">Email address</label>
         <input
           name="email"
@@ -36,6 +65,7 @@ function AuthForm({
           className="form-control"
           placeholder="Enter your email address"
           autoComplete={autoComp}
+          disabled={pageKind === "profile"}
         />
       </div>
       <div className="mb-3">
@@ -49,8 +79,32 @@ function AuthForm({
           placeholder="Enter your password"
           autoComplete={autoComp}
         />
+        {pageKind === "profile" && (
+          <small className="form-text text-muted">
+            *Your password is required in order to set new password or new
+            security question
+          </small>
+        )}
       </div>
-      {registerPage && (
+
+      {pageKind === "profile" && (
+        <div className="mb-3">
+          <label className="text-muted form-label">New password</label>
+          <input
+            name="newPassword"
+            value={userInformation.newPassword}
+            onChange={handleChange}
+            type="password"
+            className="form-control"
+            placeholder="Enter your new password"
+            autoComplete={autoComp}
+            disabled={
+              !userInformation.password || userInformation.password.length < 6
+            }
+          />
+        </div>
+      )}
+      {pageKind !== "login" && (
         <>
           <div className="pt-3 mb-3">
             <label className="mb-2 text-muted form-label">
@@ -61,6 +115,11 @@ function AuthForm({
               name="question"
               onChange={handleChange}
               value={userInformation.question}
+              disabled={
+                pageKind === "profile" &&
+                (!userInformation.password ||
+                  userInformation.password.length < 6)
+              }
             >
               <option>What is your best friend's name ?</option>
               <option>What is your favourite book ?</option>
@@ -79,6 +138,11 @@ function AuthForm({
               className="form-control"
               placeholder="Enter your answer"
               autoComplete={autoComp}
+              disabled={
+                pageKind === "profile" &&
+                (!userInformation.password ||
+                  userInformation.password.length < 6)
+              }
             ></input>
           </div>
         </>

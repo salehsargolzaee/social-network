@@ -73,7 +73,7 @@ function Login() {
             handleChange={handleChange}
             handleDisable={handleDisable}
             loading={loading}
-            registerPage={false}
+            pageKind={"login"}
           />
         </div>
       </div>

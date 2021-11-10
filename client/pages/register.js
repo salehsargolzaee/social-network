@@ -76,7 +76,7 @@ function Register() {
             handleChange={handleChange}
             handleDisable={handleDisable}
             loading={loading}
-            registerPage={true}
+            pageKind={"register"}
           />
         </div>
       </div>

@@ -85,7 +85,6 @@ exports.login = async (req, res) => {
     // make sure we dons't sednn user's password and answer
     user.password = undefined;
     user.answer = undefined;
-    user.question = undefined;
 
     res.json({
       token,
