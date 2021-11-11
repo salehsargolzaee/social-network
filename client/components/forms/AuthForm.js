@@ -81,8 +81,8 @@ function AuthForm({
         />
         {pageKind === "profile" && (
           <small className="form-text text-muted">
-            *Your password is required in order to set new password or new
-            security question
+            *Your password is required in order to set new password, please
+            leave this field empty if you don't want to change your password
           </small>
         )}
       </div>
@@ -104,7 +104,7 @@ function AuthForm({
           />
         </div>
       )}
-      {pageKind !== "login" && (
+      {pageKind === "register" && (
         <>
           <div className="pt-3 mb-3">
             <label className="mb-2 text-muted form-label">
@@ -115,11 +115,6 @@ function AuthForm({
               name="question"
               onChange={handleChange}
               value={userInformation.question}
-              disabled={
-                pageKind === "profile" &&
-                (!userInformation.password ||
-                  userInformation.password.length < 6)
-              }
             >
               <option>What is your best friend's name ?</option>
               <option>What is your favourite book ?</option>
@@ -138,11 +133,6 @@ function AuthForm({
               className="form-control"
               placeholder="Enter your answer"
               autoComplete={autoComp}
-              disabled={
-                pageKind === "profile" &&
-                (!userInformation.password ||
-                  userInformation.password.length < 6)
-              }
             ></input>
           </div>
         </>

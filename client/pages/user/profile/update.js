@@ -8,7 +8,8 @@ import { UserContext } from "../../../context";
 import UserRoute from "../../../components/routes/UserRoute";
 
 function UpdateProfile() {
-  const { state: loggedUser } = useContext(UserContext);
+  const { state: loggedUser, setState: setLoggedUser } =
+    useContext(UserContext);
 
   const fill = (property) => {
     return loggedUser && loggedUser.user && loggedUser.user[property]
@@ -22,8 +23,6 @@ function UpdateProfile() {
     about: fill("about"),
     password: "",
     newPassword: "",
-    question: fill("question"),
-    answer: "",
   });
 
   useEffect(() => {
@@ -35,8 +34,6 @@ function UpdateProfile() {
         about: fill("about"),
         password: "",
         newPassword: "",
-        question: fill("question"),
-        answer: "",
       });
     }
   }, [loggedUser && loggedUser.user]);
@@ -56,10 +53,20 @@ function UpdateProfile() {
     // console.log(userInformation);
     try {
       setLoading(true);
-      const { data } = await axios.put(`/update-profile`, userInformation);
+      const { data } = await axios.put(`/profile-update`, userInformation);
+
+      console.log("updated user=>", data);
+
+      // update local storage user
+      const auth = JSON.parse(window.localStorage.getItem("auth"));
+      auth.user = data;
+      window.localStorage.setItem("auth", JSON.stringify(auth));
+
+      // update context
+      setLoggedUser((prev) => ({ ...prev, user: data }));
 
       setLoading(false);
-      setOk(data.ok);
+      setOk(true);
     } catch (error) {
       setLoading(false);
       toast.error(error.response.data);
@@ -69,7 +76,8 @@ function UpdateProfile() {
   const handleDisable = () => {
     if (loading) return true;
     for (const key in userInformation) {
-      if (key === "about" || key === "password") continue;
+      if (key === "about" || key === "password" || key === "newPassword")
+        continue;
       if (!userInformation[key]) return true;
     }
     return false;
@@ -98,15 +106,12 @@ function UpdateProfile() {
         <div className="row">
           <div className="col">
             <Modal
-              title="Thank you!"
+              title="Successful!"
               visible={ok}
               onCancel={() => setOk(false)}
               footer={null}
             >
-              <p>You have successfully registered.</p>
-              <Link href="/login">
-                <button className="btn btn-primary btn-sm">Login</button>
-              </Link>
+              <p>Successfully updated information.</p>
             </Modal>
           </div>
         </div>

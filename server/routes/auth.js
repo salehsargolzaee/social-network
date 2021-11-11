@@ -7,6 +7,7 @@ const {
   currentUser,
   findQuestion,
   forgotPassword,
+  profileUpdate,
 } = require("../controllers/auth");
 
 //middlewares
@@ -18,6 +19,9 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/find-question", findQuestion);
 router.post("/forgot-password", forgotPassword);
+
 router.get("/current-user", requireSignin, currentUser);
+
+router.put("/profile-update", requireSignin, profileUpdate);
 
 module.exports = router;

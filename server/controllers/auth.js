@@ -176,3 +176,55 @@ exports.forgotPassword = async (req, res) => {
     res.status(400).send("An error happened. Please try again");
   }
 };
+
+exports.profileUpdate = async (req, res) => {
+  const { name, username, about, password, newPassword } = req.body;
+  const updateData = { about };
+  try {
+    if (password || newPassword) {
+      const user = await User.findOne({ _id: req.user._id });
+      const isMatch = await isPasswordTrue(password, user.password);
+      if (!isMatch) {
+        return res.status(400).send("Your password is wrong");
+      }
+      if (!newPassword || newPassword.length < 6 || newPassword.length > 64) {
+        return res
+          .status(400)
+          .send(
+            "New password is required and should be between 6 and 64 characters long."
+          );
+      }
+      const hashedPassword = await hashPassword(newPassword);
+      updateData.password = hashedPassword;
+    }
+
+    if (username) {
+      const user = await User.findOne({ username });
+      if (user) {
+        return res.status(400).send("Username is taken");
+      }
+      updateData.username = username;
+    }
+    if (name) {
+      updateData.name = name;
+    }
+
+    const user = await User.findByIdAndUpdate(req.user._id, updateData, {
+      new: true,
+    });
+
+    // make sure we dons't send user's password and answer
+    user.password = undefined;
+    user.answer = undefined;
+
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    // this code means there is a duplicate (for username)
+    if (err.code == 11000) {
+      return res.status(400).send("Username is taken");
+    }
+
+    res.status(400).send("An error happened. Please try again");
+  }
+};
