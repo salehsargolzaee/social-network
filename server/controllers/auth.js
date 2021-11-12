@@ -2,6 +2,7 @@ const { isPasswordTrue, hashPassword } = require("../helpers/auth");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 const { nanoid } = require("nanoid");
+var cloudinary = require("cloudinary").v2;
 
 exports.register = async (req, res) => {
   // console.log(req.body);
@@ -82,7 +83,7 @@ exports.login = async (req, res) => {
       expiresIn: "7d",
     });
 
-    // make sure we dons't sednn user's password and answer
+    // make sure we don't send user's password and answer
     user.password = undefined;
     user.answer = undefined;
 
@@ -178,11 +179,11 @@ exports.forgotPassword = async (req, res) => {
 };
 
 exports.profileUpdate = async (req, res) => {
-  const { name, username, about, password, newPassword } = req.body;
+  const { name, username, about, password, newPassword, photo } = req.body;
   const updateData = { about };
   try {
+    let user = await User.findOne({ _id: req.user._id });
     if (password || newPassword) {
-      const user = await User.findOne({ _id: req.user._id });
       const isMatch = await isPasswordTrue(password, user.password);
       if (!isMatch) {
         return res.status(400).send("Your password is wrong");
@@ -198,9 +199,14 @@ exports.profileUpdate = async (req, res) => {
       updateData.password = hashedPassword;
     }
 
+    if (user.photo && user.photo.public_id && user.photo.url !== photo.url) {
+      await cloudinary.uploader.destroy(user.photo.public_id);
+    }
+    updateData.photo = photo;
+
     if (username) {
-      const user = await User.findOne({ username });
-      if (user) {
+      user = await User.findOne({ username });
+      if (user && user._id != req.user._id) {
         return res.status(400).send("Username is taken");
       }
       updateData.username = username;
@@ -209,11 +215,11 @@ exports.profileUpdate = async (req, res) => {
       updateData.name = name;
     }
 
-    const user = await User.findByIdAndUpdate(req.user._id, updateData, {
+    user = await User.findByIdAndUpdate(req.user._id, updateData, {
       new: true,
     });
 
-    // make sure we dons't send user's password and answer
+    // make sure we don't send user's password and answer
     user.password = undefined;
     user.answer = undefined;
 

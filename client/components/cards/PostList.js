@@ -23,9 +23,17 @@ function PostList({ posts, setShowDeleteModal }) {
           <div key={post._id} className="card my-4">
             <div className="card-header d-flex align-items-center justify-content-between">
               <span>
-                <Avatar size={40} className="m-1">
-                  {post.postedBy.name[0].toUpperCase()}
-                </Avatar>
+                {post.postedBy.photo && post.postedBy.photo.url ? (
+                  <Avatar
+                    size={40}
+                    className="m-1"
+                    src={post.postedBy.photo.url}
+                  />
+                ) : (
+                  <Avatar size={40} className="m-1">
+                    {post.postedBy.name[0].toUpperCase()}
+                  </Avatar>
+                )}
                 <span className="m-1 ">{post.postedBy.name}</span>
               </span>
               <span className="text-muted" style={{ fontSize: "12px" }}>

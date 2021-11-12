@@ -1,11 +1,12 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Modal } from "antd";
+import { Modal, Avatar } from "antd";
 import Link from "next/link";
 import AuthForm from "../../../components/forms/AuthForm";
 import { UserContext } from "../../../context";
 import UserRoute from "../../../components/routes/UserRoute";
+import { CameraTwoTone, LoadingOutlined } from "@ant-design/icons";
 
 function UpdateProfile() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -25,6 +26,27 @@ function UpdateProfile() {
     newPassword: "",
   });
 
+  // handle adding profile image
+  const [userImage, setUserImage] = useState(fill("photo"));
+  // handle showing spinner while uploading user image
+  const [isUploading, setIsUploading] = useState(false);
+
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("image", file);
+    setIsUploading(true);
+    try {
+      const { data } = await axios.post("/upload-image", formData);
+      setUserImage({ url: data.url, public_id: data.public_id });
+      setIsUploading(false);
+    } catch (error) {
+      console.log(error);
+      setIsUploading(false);
+    }
+  };
+
   useEffect(() => {
     if (loggedUser && loggedUser.user) {
       setUserInformation({
@@ -35,6 +57,7 @@ function UpdateProfile() {
         password: "",
         newPassword: "",
       });
+      setUserImage(fill("photo"));
     }
   }, [loggedUser && loggedUser.user]);
   // ok shows if is it ok to display modal or not
@@ -53,7 +76,10 @@ function UpdateProfile() {
     // console.log(userInformation);
     try {
       setLoading(true);
-      const { data } = await axios.put(`/profile-update`, userInformation);
+      const { data } = await axios.put(`/profile-update`, {
+        ...userInformation,
+        photo: userImage,
+      });
 
       console.log("updated user=>", data);
 
@@ -93,6 +119,34 @@ function UpdateProfile() {
         </div>
         <div className="row pt-5 pb-3">
           <div className="col-md-6 offset-md-3">
+            {/* Change profile image */}
+            <label className="d-flex justify-content-center">
+              {isUploading ? (
+                <LoadingOutlined className="h2" />
+              ) : userImage && userImage.url ? (
+                <Avatar
+                  src={userImage.url}
+                  size={200}
+                  style={{ cursor: "pointer" }}
+                />
+              ) : (
+                <span className="text-muted">
+                  Add a profile picture
+                  <CameraTwoTone
+                    style={{
+                      fontSize: "30px",
+                      margin: "0 1rem",
+                    }}
+                  />
+                </span>
+              )}
+              <input
+                onChange={handleImageUpload}
+                type="file"
+                accept="image/*"
+                hidden
+              />
+            </label>
             <AuthForm
               userInformation={userInformation}
               handleSubmit={handleSubmit}
