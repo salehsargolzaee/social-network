@@ -234,3 +234,22 @@ exports.profileUpdate = async (req, res) => {
     res.status(400).send("An error happened. Please try again");
   }
 };
+
+exports.findPeople = async (req, res) => {
+  try {
+    const loggedInUser = await User.findById(req.user._id);
+
+    // We want to exclude logged in user and his/her followings from following suggestions
+    const followingsAndUser = loggedInUser.following;
+    followingsAndUser.push(loggedInUser._id);
+
+    const suggestedUsers = await User.find({
+      _id: { $nin: followingsAndUser },
+    }).limit(10);
+    console.log(suggestedUsers);
+    res.json(suggestedUsers);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};

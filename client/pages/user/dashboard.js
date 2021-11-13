@@ -15,6 +15,7 @@ function Dashboard() {
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState({});
   const [userPosts, setUserPosts] = useState([]);
+  const [suggestedPeople, setSuggestedPeople] = useState([]);
 
   // if modal showing the value of this state will be _id of target post
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -40,8 +41,20 @@ function Dashboard() {
     }
   };
 
+  const findPeople = async () => {
+    try {
+      const { data } = await axios.get("/find-people");
+      setSuggestedPeople(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    if (loggedUser && loggedUser.token) fetchUserPosts();
+    if (loggedUser && loggedUser.token) {
+      fetchUserPosts();
+      findPeople();
+    }
   }, [loggedUser && loggedUser.token]);
 
   const handlePostSubmit = async (event) => {
@@ -123,7 +136,9 @@ function Dashboard() {
             )}
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
-          <div className="col-md-4">SideBar</div>
+          <div className="col-md-4">
+            <pre>{JSON.stringify(suggestedPeople, null, 4)}</pre>
+          </div>
         </div>
         <div className="row">
           <div className="col">

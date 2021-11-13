@@ -8,6 +8,7 @@ const {
   findQuestion,
   forgotPassword,
   profileUpdate,
+  findPeople,
 } = require("../controllers/auth");
 
 //middlewares
@@ -21,6 +22,7 @@ router.post("/find-question", findQuestion);
 router.post("/forgot-password", forgotPassword);
 
 router.get("/current-user", requireSignin, currentUser);
+router.get("/find-people", requireSignin, findPeople);
 
 router.put("/profile-update", requireSignin, profileUpdate);
 
