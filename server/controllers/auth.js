@@ -245,8 +245,10 @@ exports.findPeople = async (req, res) => {
 
     const suggestedUsers = await User.find({
       _id: { $nin: followingsAndUser },
-    }).limit(10);
-    console.log(suggestedUsers);
+    })
+      .select("-password -answer -question")
+      .limit(10);
+    // console.log(suggestedUsers);
     res.json(suggestedUsers);
   } catch (err) {
     console.log(err);

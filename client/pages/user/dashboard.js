@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import PostList from "../../components/cards/PostList";
 import { Modal } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
+import PeopleList from "../../components/cards/PeopleList";
 
 function Dashboard() {
   const { state: loggedUser } = useContext(UserContext);
@@ -16,6 +17,8 @@ function Dashboard() {
   const [postImage, setPostImage] = useState({});
   const [userPosts, setUserPosts] = useState([]);
   const [suggestedPeople, setSuggestedPeople] = useState([]);
+
+  const [userCount, setUserCount] = useState(0);
 
   // if modal showing the value of this state will be _id of target post
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -55,6 +58,10 @@ function Dashboard() {
       fetchUserPosts();
       findPeople();
     }
+    return () => {
+      setUserPosts([]);
+      setSuggestedPeople([]);
+    };
   }, [loggedUser && loggedUser.token]);
 
   const handlePostSubmit = async (event) => {
@@ -137,7 +144,7 @@ function Dashboard() {
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">
-            <pre>{JSON.stringify(suggestedPeople, null, 4)}</pre>
+            <PeopleList people={suggestedPeople} />
           </div>
         </div>
         <div className="row">

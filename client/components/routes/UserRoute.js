@@ -22,6 +22,9 @@ function UserRoute({ children }) {
 
   useEffect(() => {
     if (loggedUser && loggedUser.token) checkCurrentUser();
+    return () => {
+      setLoginOk(false);
+    };
   }, [loggedUser && loggedUser.token]);
 
   process.browser &&

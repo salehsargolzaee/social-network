@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Link from "next/link";
 import AuthForm from "../components/forms/AuthForm";
 import { useRouter } from "next/router";
+import { LoadingOutlined } from "@ant-design/icons";
 
 function Login() {
   const [userInformation, setUserInformation] = useState({
@@ -39,7 +40,9 @@ function Login() {
       setLoggedUser({ user: data.user, token: data.token });
       // save in local storage
       window.localStorage.setItem("auth", JSON.stringify(data));
-      router.push("/");
+      await setTimeout(() => {
+        router.push("/user/dashboard");
+      }, 500);
     } catch (error) {
       setLoading(false);
       toast.error(error.response.data);
@@ -56,7 +59,12 @@ function Login() {
   };
 
   if (loggedUser && loggedUser.token) {
-    router.push("/");
+    setTimeout(() => {
+      router.push("/");
+    }, 500);
+    return (
+      <LoadingOutlined className="d-flex justify-content-center display-1 p-5 text-primary" />
+    );
   }
   return (
     <div className="container-fluid container-custom">

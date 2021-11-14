@@ -39,6 +39,7 @@ function Register() {
         name: "",
         email: "",
         password: "",
+        question: "What is your best friend's name ?",
         answer: "",
       });
       setLoading(false);
