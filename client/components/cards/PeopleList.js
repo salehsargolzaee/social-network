@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { Avatar, List } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
-function PeopleList({ people }) {
+function PeopleList({ people, handleFollow }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
 
@@ -26,7 +26,14 @@ function PeopleList({ people }) {
               title={<div>{user.username}</div>}
               description={user.about ? user.about : user.email}
             />
-            <button className="btn btn-outline-primary btn-sm">Follow</button>
+            <button
+              className="btn btn-outline-primary btn-sm"
+              onClick={() => {
+                handleFollow(user);
+              }}
+            >
+              Follow
+            </button>
           </List.Item>
         )}
       />

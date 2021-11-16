@@ -9,10 +9,11 @@ const {
   forgotPassword,
   profileUpdate,
   findPeople,
+  followUser,
 } = require("../controllers/auth");
 
 //middlewares
-const { requireSignin } = require("../middlewares");
+const { requireSignin, addFollower } = require("../middlewares");
 
 const router = express.Router();
 
@@ -25,5 +26,7 @@ router.get("/current-user", requireSignin, currentUser);
 router.get("/find-people", requireSignin, findPeople);
 
 router.put("/profile-update", requireSignin, profileUpdate);
+// add follower middleware to add this user to target user's followers
+router.put("/follow-user", requireSignin, addFollower, followUser);
 
 module.exports = router;

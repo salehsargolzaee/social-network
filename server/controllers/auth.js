@@ -255,3 +255,20 @@ exports.findPeople = async (req, res) => {
     res.status(400).send("An error happened. Please try again");
   }
 };
+
+exports.followUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $addToSet: { following: req.body._id },
+      },
+      { new: true }
+    ).select("-password -answer -question");
+
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};

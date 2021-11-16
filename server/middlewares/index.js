@@ -1,5 +1,6 @@
 const expressJwt = require("express-jwt");
 const Post = require("../models/post");
+const User = require("../models/user");
 
 exports.requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
@@ -16,6 +17,17 @@ exports.canModifyPost = async (req, res, next) => {
     } else {
       next();
     }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.addFollower = async (req, res, next) => {
+  try {
+    const user = await User.findByIdAndUpdate(req.body._id, {
+      $addToSet: { followers: req.user._id },
+    });
+    next();
   } catch (err) {
     console.log(err);
   }

@@ -9,9 +9,11 @@ import PostList from "../../components/cards/PostList";
 import { Modal } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import PeopleList from "../../components/cards/PeopleList";
+import user from "../../../server/models/user";
 
 function Dashboard() {
-  const { state: loggedUser } = useContext(UserContext);
+  const { state: loggedUser, setState: setLoggedUser } =
+    useContext(UserContext);
 
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState({});
@@ -111,6 +113,32 @@ function Dashboard() {
     }
   };
 
+  const handleFollow = async (user) => {
+    // console.log("Want to follow this user =>", userId);
+    try {
+      const { data } = await axios.put("/follow-user", { _id: user._id });
+
+      console.log(data);
+
+      // update user in local storage
+      const auth = JSON.parse(window.localStorage.getItem("auth"));
+      auth.user = data;
+      window.localStorage.setItem("auth", JSON.stringify(auth));
+
+      // update context
+      setLoggedUser((prev) => ({ ...prev, user: data }));
+
+      // remove followed user from suggestion list
+      setSuggestedPeople(
+        suggestedPeople.filter((person) => person._id !== user._id)
+      );
+
+      toast.success(`You have followed ${user.name}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <UserRoute>
       <div className="container-fluid container-custom">
@@ -144,7 +172,7 @@ function Dashboard() {
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">
-            <PeopleList people={suggestedPeople} />
+            <PeopleList people={suggestedPeople} handleFollow={handleFollow} />
           </div>
         </div>
         <div className="row">
