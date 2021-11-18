@@ -33,10 +33,10 @@ function Dashboard() {
 
   const router = useRouter();
 
-  const fetchUserPosts = async () => {
+  const newsFeed = async () => {
     setIsLoadingPosts(true);
     try {
-      const { data } = await axios.get("/user-posts");
+      const { data } = await axios.get("/news-feed");
       setUserPosts(data);
       setIsLoadingPosts(false);
     } catch (error) {
@@ -57,7 +57,7 @@ function Dashboard() {
 
   useEffect(() => {
     if (loggedUser && loggedUser.token) {
-      fetchUserPosts();
+      newsFeed();
       findPeople();
     }
     return () => {
@@ -77,7 +77,7 @@ function Dashboard() {
       toast.success("Successfully created the post.");
       setPostContent("");
       setPostImage({});
-      fetchUserPosts();
+      newsFeed();
     } catch (error) {
       toast.error(error.response.data);
     }
@@ -106,7 +106,7 @@ function Dashboard() {
     setShowDeleteModal(false);
     try {
       const { data } = await axios.delete(`/delete-post/${id}`);
-      if (loggedUser && loggedUser.token) fetchUserPosts();
+      if (loggedUser && loggedUser.token) newsFeed();
       toast.success("Successfully deleted the post.");
     } catch (error) {
       console.log("error in post deletion =>", error);
@@ -132,6 +132,9 @@ function Dashboard() {
       setSuggestedPeople(
         suggestedPeople.filter((person) => person._id !== user._id)
       );
+
+      // rerender posts
+      newsFeed();
 
       toast.success(`You have followed ${user.name}`);
     } catch (error) {

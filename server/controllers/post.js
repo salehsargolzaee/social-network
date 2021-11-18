@@ -1,4 +1,5 @@
 const Post = require("../models/post");
+const User = require("../models/user");
 var cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
@@ -105,5 +106,23 @@ exports.deletePost = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).send("An error happened. Please try again");
+  }
+};
+
+exports.newsFeed = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const following = user.following;
+    following.push(user._id);
+
+    const posts = await Post.find({ postedBy: { $in: following } })
+      .populate("postedBy", "_id name photo")
+      .sort({ createdAt: -1 })
+      .limit(10);
+
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Posts can't be rendered.");
   }
 };

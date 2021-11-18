@@ -9,6 +9,7 @@ const {
   getUserPostById,
   updatePost,
   deletePost,
+  newsFeed,
 } = require("../controllers/post");
 
 //middlewares
@@ -25,6 +26,7 @@ router.post(
 );
 
 router.get("/user-posts", requireSignin, userPosts);
+router.get("/news-feed", requireSignin, newsFeed);
 router.get("/user-post/:id", requireSignin, getUserPostById);
 
 // canModifyPost is a middleware which makes sure
