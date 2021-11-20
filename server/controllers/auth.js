@@ -272,3 +272,18 @@ exports.followUser = async (req, res) => {
     res.status(400).send("An error happened. Please try again");
   }
 };
+
+exports.userFollowing = async (req, res) => {
+  try {
+    const { following } = await User.findById(req.user._id);
+
+    const followingUsers = await User.find({ _id: { $in: following } }).limit(
+      150
+    );
+
+    res.json(followingUsers);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};

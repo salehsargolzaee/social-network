@@ -9,7 +9,7 @@ import PostList from "../../components/cards/PostList";
 import { Modal } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import PeopleList from "../../components/cards/PeopleList";
-import user from "../../../server/models/user";
+import Link from "next/link";
 
 function Dashboard() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -175,7 +175,18 @@ function Dashboard() {
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">
-            <PeopleList people={suggestedPeople} handleFollow={handleFollow} />
+            {loggedUser && loggedUser.user && loggedUser.user.following && (
+              <Link href={`/user/following`}>
+                <a style={{ color: "#1876D1" }}>
+                  {loggedUser.user.following.length} Following
+                </a>
+              </Link>
+            )}
+            <PeopleList
+              people={suggestedPeople}
+              handleFollow={handleFollow}
+              page="dashboard"
+            />
           </div>
         </div>
         <div className="row">

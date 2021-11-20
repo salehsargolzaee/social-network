@@ -10,6 +10,7 @@ const {
   profileUpdate,
   findPeople,
   followUser,
+  userFollowing,
 } = require("../controllers/auth");
 
 //middlewares
@@ -24,6 +25,7 @@ router.post("/forgot-password", forgotPassword);
 
 router.get("/current-user", requireSignin, currentUser);
 router.get("/find-people", requireSignin, findPeople);
+router.get("/user-following", requireSignin, userFollowing);
 
 router.put("/profile-update", requireSignin, profileUpdate);
 // add follower middleware to add this user to target user's followers
