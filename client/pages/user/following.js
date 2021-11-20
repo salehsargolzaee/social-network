@@ -26,7 +26,8 @@ const menu = (
 function Following() {
   const [followedPeople, setFollowedPeople] = useState([]);
   const [loading, setLoading] = useState(false);
-  const { state: loggedUser } = useContext(UserContext);
+  const { state: loggedUser, setState: setLoggedUser } =
+    useContext(UserContext);
 
   const fetchFollowedPeople = async () => {
     setLoading(true);
@@ -42,12 +43,26 @@ function Following() {
   };
 
   const handleUnFollow = async (user) => {
-    console.log("unfollow =>", user);
-    // try {
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error(error.response.data);
-    // }
+    // console.log("unfollow =>", user);
+    try {
+      const { data } = await axios.put("/unfollow-user", { _id: user._id });
+
+      const auth = JSON.parse(window.localStorage.getItem("auth"));
+
+      auth.user = data;
+
+      window.localStorage.setItem("auth", JSON.stringify(auth));
+
+      setLoggedUser((prev) => ({ ...prev, user: data }));
+
+      setFollowedPeople(
+        followedPeople.filter((person) => person._id !== user._id)
+      );
+      toast.success(`Unfollowed ${user.name}`);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data);
+    }
   };
 
   useEffect(() => {

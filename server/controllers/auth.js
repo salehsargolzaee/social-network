@@ -273,6 +273,25 @@ exports.followUser = async (req, res) => {
   }
 };
 
+exports.unfollowUser = async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        $pull: { following: req.body._id },
+      },
+      { new: true }
+    ).select("-password -answer -question");
+
+    // console.log(user);
+
+    res.json(user);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("An error happened. Please try again");
+  }
+};
+
 exports.userFollowing = async (req, res) => {
   try {
     const { following } = await User.findById(req.user._id);

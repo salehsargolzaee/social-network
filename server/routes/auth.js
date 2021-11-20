@@ -11,10 +11,15 @@ const {
   findPeople,
   followUser,
   userFollowing,
+  unfollowUser,
 } = require("../controllers/auth");
 
 //middlewares
-const { requireSignin, addFollower } = require("../middlewares");
+const {
+  requireSignin,
+  addFollower,
+  removeFollower,
+} = require("../middlewares");
 
 const router = express.Router();
 
@@ -30,5 +35,7 @@ router.get("/user-following", requireSignin, userFollowing);
 router.put("/profile-update", requireSignin, profileUpdate);
 // add follower middleware to add this user to target user's followers
 router.put("/follow-user", requireSignin, addFollower, followUser);
+
+router.put("/unfollow-user", requireSignin, removeFollower, unfollowUser);
 
 module.exports = router;

@@ -24,8 +24,19 @@ exports.canModifyPost = async (req, res, next) => {
 
 exports.addFollower = async (req, res, next) => {
   try {
-    const user = await User.findByIdAndUpdate(req.body._id, {
+    await User.findByIdAndUpdate(req.body._id, {
       $addToSet: { followers: req.user._id },
+    });
+    next();
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+exports.removeFollower = async (req, res, next) => {
+  try {
+    await User.findByIdAndUpdate(req.body._id, {
+      $pull: { followers: req.user._id },
     });
     next();
   } catch (err) {
