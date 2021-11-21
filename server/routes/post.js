@@ -10,6 +10,8 @@ const {
   updatePost,
   deletePost,
   newsFeed,
+  likePost,
+  unlikePost,
 } = require("../controllers/post");
 
 //middlewares
@@ -33,6 +35,8 @@ router.get("/user-post/:id", requireSignin, getUserPostById);
 // user is trying to edit or delete his/her own post not others
 
 router.put("/update-post/:id", requireSignin, canModifyPost, updatePost);
+router.put("/like-post", requireSignin, likePost);
+router.put("/unlike-post", requireSignin, unlikePost);
 
 router.delete("/delete-post/:id", requireSignin, canModifyPost, deletePost);
 

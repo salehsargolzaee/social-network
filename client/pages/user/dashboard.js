@@ -118,7 +118,7 @@ function Dashboard() {
     try {
       const { data } = await axios.put("/follow-user", { _id: user._id });
 
-      console.log(data);
+      // console.log(data);
 
       // update user in local storage
       const auth = JSON.parse(window.localStorage.getItem("auth"));
@@ -139,6 +139,25 @@ function Dashboard() {
       toast.success(`You have followed ${user.name}`);
     } catch (error) {
       console.log(error);
+    }
+  };
+
+  const handleLikeAndUnlike = async (postId, action) => {
+    // console.log("Like =>", postId);
+    try {
+      const { data } = await axios.put(`/${action}-post`, { _id: postId });
+
+      setUserPosts(
+        userPosts.map((item) => {
+          if (item._id === postId) {
+            return { ...item, likes: data };
+          }
+          return item;
+        })
+      );
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data);
     }
   };
 
@@ -170,6 +189,7 @@ function Dashboard() {
               <PostList
                 posts={userPosts}
                 setShowDeleteModal={setShowDeleteModal}
+                handleLikeAndUnlike={handleLikeAndUnlike}
               />
             )}
           </div>

@@ -126,3 +126,33 @@ exports.newsFeed = async (req, res) => {
     res.status(400).send("Posts can't be rendered.");
   }
 };
+
+exports.likePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.body._id,
+      { $addToSet: { likes: req.user._id } },
+      { new: true }
+    );
+
+    res.json(post.likes);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Can't like. Please try again.");
+  }
+};
+
+exports.unlikePost = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.body._id,
+      { $pull: { likes: req.user._id } },
+      { new: true }
+    );
+
+    res.json(post.likes);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Can't unlike. Please try again.");
+  }
+};

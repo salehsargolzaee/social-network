@@ -8,12 +8,13 @@ import {
   CommentOutlined,
   EditOutlined,
   DeleteOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
 
-function PostList({ posts, setShowDeleteModal }) {
+function PostList({ posts, setShowDeleteModal, handleLikeAndUnlike }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
   return (
@@ -23,17 +24,18 @@ function PostList({ posts, setShowDeleteModal }) {
           <div key={post._id} className="card my-4">
             <div className="card-header d-flex align-items-center justify-content-between">
               <span>
-                {post.postedBy.photo && post.postedBy.photo.url ? (
-                  <Avatar
-                    size={40}
-                    className="m-1"
-                    src={post.postedBy.photo.url}
-                  />
-                ) : (
-                  <Avatar size={40} className="m-1">
-                    {post.postedBy.name[0].toUpperCase()}
-                  </Avatar>
-                )}
+                <Avatar
+                  size={40}
+                  className="m-1"
+                  src={
+                    post &&
+                    post.postedBy &&
+                    post.postedBy.photo &&
+                    post.postedBy.photo.url
+                  }
+                  icon={<UserOutlined />}
+                  style={{ backgroundColor: "#577594" }}
+                />
                 <span className="m-1 ">{post.postedBy.name}</span>
               </span>
               <span className="text-muted" style={{ fontSize: "12px" }}>
@@ -52,8 +54,46 @@ function PostList({ posts, setShowDeleteModal }) {
 
               <div className="d-flex align-items-center justify-content-between">
                 <span>
-                  <HeartOutlined className="text-danger pt-3 h5" />
-                  <CommentOutlined className="pt-3 ps-3 h5" />
+                  {loggedUser &&
+                  loggedUser.user._id &&
+                  post.likes.includes(loggedUser.user._id) ? (
+                    <HeartFilled
+                      onClick={() => {
+                        handleLikeAndUnlike(post._id, "unlike");
+                      }}
+                      className="text-danger pt-3 h5 me-2 pb-1 "
+                    />
+                  ) : (
+                    <HeartOutlined
+                      onClick={() => {
+                        handleLikeAndUnlike(post._id, "like");
+                      }}
+                      className="text-danger pt-3 h5 me-2 pb-1 "
+                    />
+                  )}
+
+                  <span
+                    style={{
+                      position: "relative",
+                      top: "2.5px",
+                      fontSize: "13px",
+                    }}
+                    className="text-muted"
+                  >
+                    {post.likes.length} Likes
+                  </span>
+
+                  <CommentOutlined className="pt-3 ps-3 h5 me-2" />
+                  <span
+                    style={{
+                      position: "relative",
+                      top: "2.5px",
+                      fontSize: "13px",
+                    }}
+                    className="text-muted"
+                  >
+                    {post.comments.length} Comments
+                  </span>
                 </span>
                 {loggedUser &&
                   loggedUser.user &&
