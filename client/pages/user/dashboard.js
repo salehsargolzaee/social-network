@@ -179,7 +179,10 @@ function Dashboard() {
   const sendComment = async (event) => {
     event.preventDefault();
     try {
-      const { data } = await axios.post("/add-comment", comment);
+      const { data } = await axios.put("/add-comment", {
+        postId: comment.targetPost._id,
+        comment: comment.commentContent,
+      });
 
       console.log(data);
       setShowCommentModal(false);
@@ -189,7 +192,7 @@ function Dashboard() {
       });
       setUserPosts(
         userPosts.map((item) => {
-          if (item._id === data._id) {
+          if (item._id === data.postId) {
             return { ...item, comments: data.comments };
           }
           return item;

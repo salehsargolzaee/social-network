@@ -60,7 +60,7 @@ function Login() {
 
   if (loggedUser && loggedUser.token) {
     setTimeout(() => {
-      router.push("/");
+      router.push("/user/dashboard");
     }, 500);
     return (
       <LoadingOutlined className="d-flex justify-content-center display-1 p-5 text-primary" />
