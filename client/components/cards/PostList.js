@@ -14,7 +14,12 @@ import { useContext, useState } from "react";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
 
-function PostList({ posts, setShowDeleteModal, handleLikeAndUnlike }) {
+function PostList({
+  posts,
+  setShowDeleteModal,
+  handleLikeAndUnlike,
+  handleComment,
+}) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
   return (
@@ -83,7 +88,10 @@ function PostList({ posts, setShowDeleteModal, handleLikeAndUnlike }) {
                     {post.likes.length} Likes
                   </span>
 
-                  <CommentOutlined className="pt-3 ps-3 h5 me-2" />
+                  <CommentOutlined
+                    onClick={() => handleComment(post)}
+                    className="pt-3 ps-3 h5 me-2"
+                  />
                   <span
                     style={{
                       position: "relative",

@@ -10,6 +10,8 @@ import { Modal } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import PeopleList from "../../components/cards/PeopleList";
 import Link from "next/link";
+import DeleteModal from "../../components/modals/DeleteModal";
+import CommentModal from "../../components/modals/CommentModal";
 
 function Dashboard() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -18,12 +20,20 @@ function Dashboard() {
   const [postContent, setPostContent] = useState("");
   const [postImage, setPostImage] = useState({});
   const [userPosts, setUserPosts] = useState([]);
+  const [comment, setComment] = useState({
+    targetPost: "",
+    commentContent: "",
+  });
+
   const [suggestedPeople, setSuggestedPeople] = useState([]);
 
   const [userCount, setUserCount] = useState(0);
 
   // if modal showing the value of this state will be _id of target post
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  // comment modal visibility
+  const [showCommentModal, setShowCommentModal] = useState(false);
 
   // loading spinner for image uploading delay
   const [isLoading, setIsLoading] = useState(false);
@@ -161,6 +171,39 @@ function Dashboard() {
     }
   };
 
+  const handleComment = (post) => {
+    setComment((prev) => ({ ...prev, targetPost: post }));
+    setShowCommentModal(true);
+  };
+
+  const sendComment = async (event) => {
+    event.preventDefault();
+    try {
+      const { data } = await axios.post("/add-comment", comment);
+
+      console.log(data);
+      setShowCommentModal(false);
+      setComment({
+        targetPost: "",
+        commentContent: "",
+      });
+      setUserPosts(
+        userPosts.map((item) => {
+          if (item._id === data._id) {
+            return { ...item, comments: data.comments };
+          }
+          return item;
+        })
+      );
+      toast.success("Successfully added the comment");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data);
+    }
+  };
+
+  const deleteComment = async () => {};
+
   return (
     <UserRoute>
       <div className="container-fluid container-custom">
@@ -190,6 +233,7 @@ function Dashboard() {
                 posts={userPosts}
                 setShowDeleteModal={setShowDeleteModal}
                 handleLikeAndUnlike={handleLikeAndUnlike}
+                handleComment={handleComment}
               />
             )}
           </div>
@@ -209,26 +253,18 @@ function Dashboard() {
             />
           </div>
         </div>
-        <div className="row">
-          <div className="col">
-            <Modal
-              title="Warning!"
-              visible={showDeleteModal}
-              onCancel={() => setShowDeleteModal(false)}
-              onOk={() => handlePostDelete(showDeleteModal)}
-              okButtonProps={{ type: "danger" }}
-              okText="Delete"
-            >
-              <h2> Are you sure?</h2>
-              <p>
-                <strong>
-                  Do you really want to delete this post? This process cannot be
-                  undone.
-                </strong>
-              </p>
-            </Modal>
-          </div>
-        </div>
+        <DeleteModal
+          showDeleteModal={showDeleteModal}
+          setShowDeleteModal={setShowDeleteModal}
+          handleDelete={handlePostDelete}
+        />
+        <CommentModal
+          showCommentModal={showCommentModal}
+          setShowCommentModal={setShowCommentModal}
+          comment={comment}
+          setComment={setComment}
+          sendComment={sendComment}
+        />
       </div>
     </UserRoute>
   );
