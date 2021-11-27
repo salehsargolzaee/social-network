@@ -117,6 +117,7 @@ exports.newsFeed = async (req, res) => {
 
     const posts = await Post.find({ postedBy: { $in: following } })
       .populate("postedBy", "_id name photo")
+      .populate("comments.postedBy", "_id name photo")
       .sort({ createdAt: -1 })
       .limit(10);
 
@@ -154,5 +155,21 @@ exports.unlikePost = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).send("Can't unlike. Please try again.");
+  }
+};
+
+exports.addComment = async (req, res) => {
+  try {
+    const { postId, comment } = req.body;
+    const post = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: { comments: { text: comment, postedBy: req.user._id } },
+      },
+      { new: true }
+    ).populate("comments.postedBy", "_id name photo");
+    res.json({ postId: post._id, comments: post.comments });
+  } catch (err) {
+    res.status(400).send("Unsuccessfull, please try again later.");
   }
 };

@@ -12,6 +12,7 @@ const {
   newsFeed,
   likePost,
   unlikePost,
+  addComment,
 } = require("../controllers/post");
 
 //middlewares
@@ -37,6 +38,7 @@ router.get("/user-post/:id", requireSignin, getUserPostById);
 router.put("/update-post/:id", requireSignin, canModifyPost, updatePost);
 router.put("/like-post", requireSignin, likePost);
 router.put("/unlike-post", requireSignin, unlikePost);
+router.put("/add-comment", requireSignin, addComment);
 
 router.delete("/delete-post/:id", requireSignin, canModifyPost, deletePost);
 

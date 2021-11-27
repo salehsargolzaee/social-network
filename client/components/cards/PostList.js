@@ -13,6 +13,7 @@ import {
 import { useContext, useState } from "react";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 function PostList({
   posts,
@@ -22,6 +23,12 @@ function PostList({
 }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
+  const [commentCountStyle, setCommentCountStyle] = useState({
+    position: "relative",
+    top: "2.5px",
+    fontSize: "13px",
+    color: "#6C757D",
+  });
   return (
     <>
       {posts &&
@@ -92,16 +99,26 @@ function PostList({
                     onClick={() => handleComment(post)}
                     className="pt-3 ps-3 h5 me-2"
                   />
-                  <span
-                    style={{
-                      position: "relative",
-                      top: "2.5px",
-                      fontSize: "13px",
-                    }}
-                    className="text-muted"
-                  >
-                    {post.comments.length} Comments
-                  </span>
+                  <Link href={`/post/${post._id}`}>
+                    <a
+                      style={commentCountStyle}
+                      // className="text-muted"
+                      onMouseEnter={() =>
+                        setCommentCountStyle((prev) => ({
+                          ...prev,
+                          color: "black",
+                        }))
+                      }
+                      onMouseLeave={() =>
+                        setCommentCountStyle((prev) => ({
+                          ...prev,
+                          color: "#6C757D",
+                        }))
+                      }
+                    >
+                      {post.comments.length} Comments
+                    </a>
+                  </Link>
                 </span>
                 {loggedUser &&
                   loggedUser.user &&
@@ -119,6 +136,43 @@ function PostList({
                   )}
               </div>
             </div>
+            {/* Show some of commnets */}
+            {post.comments && post.comments.length > 0 && (
+              <div className="list-group">
+                {post.comments.map((comment) => (
+                  <span key={comment._id} className="list-group-item">
+                    <div className="d-flex w-100 justify-content-between">
+                      <span>
+                        {console.log(comment)}
+                        <Avatar
+                          src={
+                            comment.postedBy &&
+                            comment.postedBy.photo &&
+                            comment.postedBy.photo.url
+                          }
+                          icon={<UserOutlined />}
+                          size={28}
+                          style={{ backgroundColor: "#577594" }}
+                        />
+                        <p
+                          className="mb-1 ms-2"
+                          style={{ display: "inline-block" }}
+                        >
+                          {comment.postedBy.name}
+                        </p>
+                      </span>
+
+                      <small className="text-muted mt-1">
+                        {moment(comment.created).fromNow()}
+                      </small>
+                    </div>
+                    <p className="mb-1" style={{ marginLeft: "2.3rem" }}>
+                      {comment.text}
+                    </p>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         ))}
     </>
