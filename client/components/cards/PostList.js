@@ -20,6 +20,7 @@ function PostList({
   setShowDeleteModal,
   handleLikeAndUnlike,
   handleComment,
+  commentCount = 2,
 }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
@@ -29,6 +30,7 @@ function PostList({
     fontSize: "13px",
     color: "#6C757D",
   });
+
   return (
     <>
       {posts &&
@@ -139,11 +141,10 @@ function PostList({
             {/* Show some of commnets */}
             {post.comments && post.comments.length > 0 && (
               <div className="list-group">
-                {post.comments.map((comment) => (
+                {post.comments.slice(0, commentCount).map((comment) => (
                   <span key={comment._id} className="list-group-item">
                     <div className="d-flex w-100 justify-content-between">
                       <span>
-                        {console.log(comment)}
                         <Avatar
                           src={
                             comment.postedBy &&

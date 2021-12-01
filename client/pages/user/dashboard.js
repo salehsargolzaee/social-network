@@ -51,7 +51,7 @@ function Dashboard() {
       setIsLoadingPosts(false);
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data);
+      toast.error("Error in loading newsFeed");
       setIsLoadingPosts(false);
     }
   };
