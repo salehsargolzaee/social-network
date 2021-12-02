@@ -22,6 +22,22 @@ exports.canModifyPost = async (req, res, next) => {
   }
 };
 
+exports.canModifyComment = async (req, res, next) => {
+  try {
+    const post = await Post.findById(req.body.postId);
+    const comment = post.comments.filter(
+      (comment) => comment._id == req.body.commentId
+    );
+    if (comment[0].postedBy != req.user._id) {
+      return res.json({ err: "This request is not allowed for you." });
+    } else {
+      next();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.addFollower = async (req, res, next) => {
   try {
     await User.findByIdAndUpdate(req.body._id, {

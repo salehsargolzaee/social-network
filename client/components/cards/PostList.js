@@ -14,13 +14,14 @@ import { useContext, useState } from "react";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 
 function PostList({
   posts,
   setShowDeleteModal,
   handleLikeAndUnlike,
   handleComment,
-  commentCount = 2,
+  commentCount = 5,
 }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
@@ -131,7 +132,7 @@ function PostList({
                         className="h5"
                       />
                       <DeleteOutlined
-                        onClick={() => setShowDeleteModal(post._id)}
+                        onClick={() => setShowDeleteModal({ postId: post._id })}
                         className="ms-3 h5"
                       />
                     </span>
@@ -140,7 +141,13 @@ function PostList({
             </div>
             {/* Show some of commnets */}
             {post.comments && post.comments.length > 0 && (
-              <div className="list-group">
+              <div
+                className="list-group"
+                style={{
+                  maxHeight: "140px",
+                  overflow: "scroll",
+                }}
+              >
                 {post.comments.slice(0, commentCount).map((comment) => (
                   <span key={comment._id} className="list-group-item">
                     <div className="d-flex w-100 justify-content-between">
@@ -167,11 +174,41 @@ function PostList({
                         {moment(comment.created).fromNow()}
                       </small>
                     </div>
-                    <p className="mb-1" style={{ marginLeft: "2.3rem" }}>
-                      {comment.text}
-                    </p>
+                    <div
+                      className="d-flex w-100 justify-content-between"
+                      style={{ wordBreak: "break-all" }}
+                    >
+                      <p className="mb-1" style={{ marginLeft: "2.3rem" }}>
+                        {comment.text}
+                      </p>
+                      {loggedUser &&
+                        loggedUser.user &&
+                        loggedUser.user._id == comment.postedBy._id && (
+                          <span>
+                            <DeleteOutlined
+                              onClick={() =>
+                                setShowDeleteModal({
+                                  postId: post._id,
+                                  commentId: comment._id,
+                                })
+                              }
+                              className="ms-3 h5"
+                              style={{ fontSize: "16px" }}
+                            />
+                          </span>
+                        )}
+                    </div>
                   </span>
                 ))}
+                {post.comments.length > 2 && commentCount === 5 && (
+                  <div className="list-group-item d-flex justify-content-center">
+                    <Link href={`/post/${post._id}`}>
+                      <a>
+                        <MoreHorizIcon /> All comments
+                      </a>
+                    </Link>
+                  </div>
+                )}
               </div>
             )}
           </div>

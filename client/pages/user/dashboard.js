@@ -29,7 +29,8 @@ function Dashboard() {
 
   const [userCount, setUserCount] = useState(0);
 
-  // if modal showing the value of this state will be _id of target post
+  // if modal showing the value of this state will be {post:_id } of target post
+  // or {comment:_id} of target comment
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // comment modal visibility
@@ -112,14 +113,46 @@ function Dashboard() {
     }
   };
 
-  const handlePostDelete = async (id) => {
+  const handlePostDelete = async ({ postId: id }) => {
     setShowDeleteModal(false);
     try {
       const { data } = await axios.delete(`/delete-post/${id}`);
-      if (loggedUser && loggedUser.token) newsFeed();
-      toast.success("Successfully deleted the post.");
+      if (data.err) {
+        toast.error(data.err);
+      } else {
+        if (loggedUser && loggedUser.token) newsFeed();
+        toast.success("Successfully deleted the post.");
+      }
     } catch (error) {
       console.log("error in post deletion =>", error);
+    }
+  };
+
+  const handleCommentDelete = async ({ postId, commentId }) => {
+    setShowDeleteModal(false);
+    try {
+      const { data } = await axios.put(`/delete-comment`, {
+        postId,
+        commentId,
+      });
+
+      if (data.err) {
+        toast.error(data.err);
+      } else {
+        setUserPosts(
+          userPosts.map((item) => {
+            if (item._id === postId) {
+              return { ...item, comments: data };
+            }
+            return item;
+          })
+        );
+
+        toast.success("Successfully deleted comment.");
+      }
+    } catch (error) {
+      console.log("error in comment deletion=> ", error);
+      toast.error("Something went wrong, please try again later.");
     }
   };
 
@@ -259,7 +292,9 @@ function Dashboard() {
         <DeleteModal
           showDeleteModal={showDeleteModal}
           setShowDeleteModal={setShowDeleteModal}
-          handleDelete={handlePostDelete}
+          handleDelete={
+            showDeleteModal.commentId ? handleCommentDelete : handlePostDelete
+          }
         />
         <CommentModal
           showCommentModal={showCommentModal}

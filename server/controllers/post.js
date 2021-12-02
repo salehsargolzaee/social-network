@@ -175,3 +175,17 @@ exports.addComment = async (req, res) => {
     res.status(400).send("Unsuccessfull, please try again later.");
   }
 };
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const post = await Post.findByIdAndUpdate(
+      req.body.postId,
+      { $pull: { comments: { _id: req.body.commentId } } },
+      { new: true }
+    ).populate("comments.postedBy", "_id name photo");
+    res.json(post.comments);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send("Unsuccessfull, please try again later.");
+  }
+};
