@@ -53,7 +53,7 @@ exports.register = async (req, res) => {
     if (err) {
       console.log("Registraion Error => ", err);
       return res
-        .status(400)
+        .status(500)
         .send("Something went wrong. Please try again later.");
     }
     return res.json({
@@ -93,7 +93,7 @@ exports.login = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(400).send("An error happened. Please try again");
+    return res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -107,7 +107,7 @@ exports.currentUser = async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.log(err);
-    res.sendStatus(400);
+    res.sendStatus(500);
   }
 };
 
@@ -127,7 +127,7 @@ exports.findQuestion = async (req, res) => {
     res.json({ question: user.question, _id: user._id });
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -174,7 +174,7 @@ exports.forgotPassword = async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -231,7 +231,7 @@ exports.profileUpdate = async (req, res) => {
       return res.status(400).send("Username is taken");
     }
 
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -252,7 +252,7 @@ exports.findPeople = async (req, res) => {
     res.json(suggestedUsers);
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -269,7 +269,7 @@ exports.followUser = async (req, res) => {
     res.json(user);
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -288,7 +288,7 @@ exports.unfollowUser = async (req, res) => {
     res.json(user);
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -303,6 +303,6 @@ exports.userFollowing = async (req, res) => {
     res.json(followingUsers);
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };

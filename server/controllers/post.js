@@ -27,7 +27,7 @@ exports.createPost = async (req, res) => {
     await post.save().then((posted) => res.json(posted));
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -42,24 +42,24 @@ exports.uploadImage = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
-exports.userPosts = async (req, res) => {
-  try {
-    // await Post.find({ postedBy: req.user._id })
-    const posts = await Post.find()
-      .populate("postedBy", "_id name photo")
-      .sort({ createdAt: -1 })
-      .limit(10);
-    // console.log("posts => ", posts);
-    res.json(posts);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send("Posts can't be rendered.");
-  }
-};
+// exports.userPosts = async (req, res) => {
+//   try {
+//     // await Post.find({ postedBy: req.user._id })
+//     const posts = await Post.find()
+//       .populate("postedBy", "_id name photo")
+//       .sort({ createdAt: -1 })
+//       .limit(10);
+//     // console.log("posts => ", posts);
+//     res.json(posts);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(500).send("Posts can't be rendered.");
+//   }
+// };
 
 exports.getUserPostById = async (req, res) => {
   try {
@@ -69,7 +69,7 @@ exports.getUserPostById = async (req, res) => {
     res.json(post);
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -92,7 +92,7 @@ exports.updatePost = async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -107,7 +107,7 @@ exports.deletePost = async (req, res) => {
     res.json({ ok: true });
   } catch (err) {
     console.log(err);
-    res.status(400).send("An error happened. Please try again");
+    res.status(500).send("An error happened. Please try again");
   }
 };
 
@@ -117,16 +117,21 @@ exports.newsFeed = async (req, res) => {
     const following = user.following;
     following.push(user._id);
 
+    // pagination related work
+    const currentPage = req.params.page || 1;
+    const showPerPage = 4;
+
     const posts = await Post.find({ postedBy: { $in: following } })
+      .skip((currentPage - 1) * showPerPage)
       .populate("postedBy", "_id name photo")
       .populate("comments.postedBy", "_id name photo")
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(showPerPage);
 
     res.json(posts);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Posts can't be rendered.");
+    res.status(500).send("Posts can't be rendered.");
   }
 };
 
@@ -141,7 +146,7 @@ exports.likePost = async (req, res) => {
     res.json(post.likes);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Can't like. Please try again.");
+    res.status(500).send("Can't like. Please try again.");
   }
 };
 
@@ -156,7 +161,7 @@ exports.unlikePost = async (req, res) => {
     res.json(post.likes);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Can't unlike. Please try again.");
+    res.status(500).send("Can't unlike. Please try again.");
   }
 };
 
@@ -172,7 +177,7 @@ exports.addComment = async (req, res) => {
     ).populate("comments.postedBy", "_id name photo");
     res.json({ postId: post._id, comments: post.comments });
   } catch (err) {
-    res.status(400).send("Unsuccessfull, please try again later.");
+    res.status(500).send("Unsuccessfull, please try again later.");
   }
 };
 
@@ -186,6 +191,23 @@ exports.deleteComment = async (req, res) => {
     res.json(post.comments);
   } catch (err) {
     console.log(err);
-    res.status(400).send("Unsuccessfull, please try again later.");
+    res.status(500).send("Unsuccessfull, please try again later.");
+  }
+};
+
+exports.totalPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+    const following = user.following;
+    following.push(user._id);
+
+    const totalPosts = await Post.count({
+      postedBy: { $in: following },
+    });
+    console.log(totalPosts);
+    res.json(totalPosts);
+  } catch (err) {
+    console.log("Error in getting total posts => ", err);
+    res.status(500).send("Error in getting total posts");
   }
 };

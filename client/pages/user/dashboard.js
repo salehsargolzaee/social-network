@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 import { toast } from "react-toastify";
 import PostList from "../../components/cards/PostList";
-import { Modal } from "antd";
+import { Pagination } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import PeopleList from "../../components/cards/PeopleList";
 import Link from "next/link";
@@ -42,12 +42,16 @@ function Dashboard() {
   // loading spinner for post fetching delay
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
 
+  // total posts in database for pagination
+  const [totalPosts, setTotalPosts] = useState(0);
+  const [pageNumber, setPageNumber] = useState(1);
+
   const router = useRouter();
 
   const newsFeed = async () => {
     setIsLoadingPosts(true);
     try {
-      const { data } = await axios.get("/news-feed");
+      const { data } = await axios.get(`/news-feed/${pageNumber}`);
       setUserPosts(data);
       setIsLoadingPosts(false);
     } catch (error) {
@@ -75,6 +79,17 @@ function Dashboard() {
       setUserPosts([]);
       setSuggestedPeople([]);
     };
+  }, [loggedUser && loggedUser.token, pageNumber]);
+
+  useEffect(() => {
+    if (loggedUser && loggedUser.token) {
+      axios
+        .get("/total-posts")
+        .then(({ data }) => setTotalPosts(data))
+        .catch((error) => {
+          console.log("Can't get total posts number =>", error.data.response);
+        });
+    }
   }, [loggedUser && loggedUser.token]);
 
   const handlePostSubmit = async (event) => {
@@ -84,11 +99,12 @@ function Dashboard() {
         postContent,
         postImage,
       });
-      console.log("Post creation response => ", data);
+      // console.log("Post creation response => ", data);
       toast.success("Successfully created the post.");
       setPostContent("");
       setPostImage({});
       newsFeed();
+      setPageNumber(1);
     } catch (error) {
       toast.error(error.response.data);
     }
@@ -104,7 +120,7 @@ function Dashboard() {
     setIsLoading(true);
     try {
       const { data } = await axios.post("/upload-image", formData);
-      console.log("Uploaded image data => ", data);
+      // console.log("Uploaded image data => ", data);
       setPostImage({ url: data.url, public_id: data.public_id });
       setIsLoading(false);
     } catch (error) {
@@ -217,7 +233,7 @@ function Dashboard() {
         comment: comment.commentContent,
       });
 
-      console.log(data);
+      // console.log(data);
       setShowCommentModal(false);
       setComment({
         targetPost: "",
@@ -237,8 +253,6 @@ function Dashboard() {
       toast.error(error.response.data);
     }
   };
-
-  const deleteComment = async () => {};
 
   return (
     <UserRoute>
@@ -272,6 +286,15 @@ function Dashboard() {
                 handleComment={handleComment}
               />
             )}
+            <div className="d-flex justify-content-center">
+              <Pagination
+                defaultCurrent={pageNumber}
+                current={pageNumber}
+                pageSize={4}
+                total={totalPosts}
+                onChange={(value) => setPageNumber(value)}
+              />
+            </div>
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">
