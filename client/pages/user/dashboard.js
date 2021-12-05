@@ -12,6 +12,7 @@ import PeopleList from "../../components/cards/PeopleList";
 import Link from "next/link";
 import DeleteModal from "../../components/modals/DeleteModal";
 import CommentModal from "../../components/modals/CommentModal";
+import Search from "../../components/Search";
 
 function Dashboard() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -298,6 +299,7 @@ function Dashboard() {
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">
+            <Search />
             {loggedUser && loggedUser.user && loggedUser.user.following && (
               <Link href={`/user/following`}>
                 <a style={{ color: "#1876D1" }}>
