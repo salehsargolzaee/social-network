@@ -79,3 +79,13 @@ img {
 .css-sghohy-MuiButtonBase-root-MuiButton-root {
   box-shadow: 0 0 0;
 }
+
+.css-1w8yruj-MuiInputBase-root-MuiFilledInput-root,
+.css-1w8yruj-MuiInputBase-root-MuiFilledInput-root:hover,
+.css-1w8yruj-MuiInputBase-root-MuiFilledInput-root:focus,
+.MuiAutocomplete-hasPopupIcon.css-ei7t0p-MuiAutocomplete-root
+  .MuiFilledInput-root,
+.MuiAutocomplete-hasClearIcon.css-ei7t0p-MuiAutocomplete-root
+  .MuiFilledInput-root {
+  background-color: #f4f6f7;
+}

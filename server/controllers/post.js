@@ -204,7 +204,7 @@ exports.totalPosts = async (req, res) => {
     const totalPosts = await Post.count({
       postedBy: { $in: following },
     });
-    console.log(totalPosts);
+    // console.log(totalPosts);
     res.json(totalPosts);
   } catch (err) {
     console.log("Error in getting total posts => ", err);

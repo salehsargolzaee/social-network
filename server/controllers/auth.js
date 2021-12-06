@@ -306,3 +306,34 @@ exports.userFollowing = async (req, res) => {
     res.status(500).send("An error happened. Please try again");
   }
 };
+
+exports.userSearch = async (req, res) => {
+  const { query } = req.params;
+
+  if (!query) return;
+
+  try {
+    // The "i" in options means we want to perform case-insensitive matching
+    const user = await User.find({
+      $or: [
+        {
+          name: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+        {
+          username: {
+            $regex: query,
+            $options: "i",
+          },
+        },
+      ],
+    }).select("_id name photo about username");
+
+    res.json(user);
+  } catch (err) {
+    console.log("Error in finding searched user in database=>", err);
+    res.status(500).send("An error happened. Please try again");
+  }
+};

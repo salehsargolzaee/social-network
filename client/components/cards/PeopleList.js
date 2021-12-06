@@ -24,7 +24,9 @@ function PeopleList({ people, handleFollow, page }) {
                 />
               }
               title={<div>{user.username}</div>}
-              description={user.about ? user.about : user.email}
+              description={
+                user.about ? user.about : user.name ? user.name : null
+              }
             />
 
             <button
