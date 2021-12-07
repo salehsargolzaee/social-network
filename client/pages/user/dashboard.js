@@ -299,7 +299,7 @@ function Dashboard() {
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4">
-            <Search />
+            <Search handleFollow={handleFollow} />
             {loggedUser && loggedUser.user && loggedUser.user.following && (
               <Link href={`/user/following`}>
                 <a style={{ color: "#1876D1" }}>
@@ -310,7 +310,7 @@ function Dashboard() {
             <PeopleList
               people={suggestedPeople}
               handleFollow={handleFollow}
-              page="dashboard"
+              followStatus="dashboard"
             />
           </div>
         </div>

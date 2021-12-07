@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import { Avatar, List } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 
-function PeopleList({ people, handleFollow, page }) {
+function PeopleList({ people, handleFollow, followStatus }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
 
@@ -32,10 +32,10 @@ function PeopleList({ people, handleFollow, page }) {
             <button
               className="btn btn-outline-primary btn-sm"
               onClick={() => {
-                handleFollow(user);
+                if (handleFollow) handleFollow(user);
               }}
             >
-              {page === "dashboard" ? "Follow" : "Unfollow"}
+              {followStatus === "dashboard" ? "Follow" : `${followStatus}`}
             </button>
           </List.Item>
         )}

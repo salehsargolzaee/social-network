@@ -80,7 +80,7 @@ function Following() {
               <PeopleList
                 people={followedPeople}
                 handleFollow={handleUnFollow}
-                page="following"
+                followStatus="Unfollow"
               />
             </div>
           </div>

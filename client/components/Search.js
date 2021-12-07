@@ -6,13 +6,17 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 import PeopleList from "../components/cards/PeopleList";
+import { toast } from "react-toastify";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
 const Options = ["!!", "??"];
-function Search() {
-  const { state: loggedUser } = useContext(UserContext);
+function Search({ handleFollow }) {
+  const { state: loggedUser, setState: setLoggedUser } =
+    useContext(UserContext);
 
   const [searchValue, setSearchValue] = useState("");
   const [searchResult, setSearchResult] = useState([]);
+  const [followStatus, setFollowStatus] = useState([]);
 
   const [iconColor, setIconColor] = useState({
     account: "disabled",
@@ -27,13 +31,83 @@ function Search() {
       // console.log("user search response=> ", data);
       if (!data.length) {
         data.push({ notFound: 1 });
+        setSearchResult(data);
+      } else {
+        setSearchResult(data);
+        setFollowStatus(
+          data.map((person) => {
+            if (loggedUser.user.following.includes(person._id)) {
+              return "Unfollow";
+            } else if (loggedUser.user.followers.includes(person._id)) {
+              return "Follow Back ";
+            } else if (loggedUser.user._id === person._id) {
+              return "You";
+            } else {
+              return "Follow";
+            }
+          })
+        );
       }
-      setSearchResult(data);
+
       setSearchValue("");
     } catch (error) {
       console.log("Error in user search=> ", error);
     }
   };
+
+  const handleUnFollow = async (user) => {
+    // console.log("unfollow =>", user);
+    try {
+      const { data } = await axios.put("/unfollow-user", { _id: user._id });
+
+      const auth = JSON.parse(window.localStorage.getItem("auth"));
+
+      auth.user = data;
+
+      window.localStorage.setItem("auth", JSON.stringify(auth));
+
+      setLoggedUser((prev) => ({ ...prev, user: data }));
+
+      toast.success(`Unfollowed ${user.name}`);
+    } catch (error) {
+      console.log(error);
+      toast.error(error.response.data);
+    }
+    for (let i = 0; i < searchResult.length; i++) {
+      if (searchResult[i]["_id"] === user._id) {
+        setFollowStatus(
+          followStatus.map((status, index) => {
+            if (index === i) {
+              return loggedUser.user.followers.includes(user._id)
+                ? "Follow Back"
+                : "Follow";
+            } else {
+              return status;
+            }
+          })
+        );
+        break;
+      }
+    }
+  };
+  const handleFollowSearch = (user) => {
+    handleFollow(user);
+    for (let i = 0; i < searchResult.length; i++) {
+      if (searchResult[i]["_id"] === user._id) {
+        setFollowStatus(
+          followStatus.map((status, index) => {
+            if (index === i) {
+              return "Unfollow";
+            } else {
+              return status;
+            }
+          })
+        );
+        break;
+      }
+    }
+  };
+
   return (
     <div>
       <Box sx={{ display: "flex", alignItems: "flex-end" }} className="mb-4">
@@ -84,11 +158,42 @@ function Search() {
       </Box>
       {searchResult.length === 1 && searchResult[0].notFound && (
         <div className="d-flex justify-content-center text-muted">
+          <CloseCircleOutlined
+            className="pe-2 pb-1"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setSearchResult([]);
+              setFollowStatus([]);
+            }}
+          />
           No User Found
         </div>
       )}
       {searchResult.length != 0 && !searchResult[0].notFound && (
-        <PeopleList people={searchResult} />
+        <>
+          <CloseCircleOutlined
+            className="ps-1 pb-1"
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setSearchResult([]);
+              setFollowStatus([]);
+            }}
+          />
+          {searchResult.map((person, index) => (
+            <PeopleList
+              key={person._id}
+              people={[person]}
+              handleFollow={
+                followStatus[index] !== "Unfollow"
+                  ? followStatus[index] === "You"
+                    ? null
+                    : handleFollowSearch
+                  : handleUnFollow
+              }
+              followStatus={followStatus[index]}
+            />
+          ))}
+        </>
       )}
     </div>
   );
