@@ -9,7 +9,6 @@ import PeopleList from "../components/cards/PeopleList";
 import { toast } from "react-toastify";
 import { CloseCircleOutlined } from "@ant-design/icons";
 
-const Options = ["!!", "??"];
 function Search({ handleFollow }) {
   const { state: loggedUser, setState: setLoggedUser } =
     useContext(UserContext);

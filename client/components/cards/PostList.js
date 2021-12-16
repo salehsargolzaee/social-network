@@ -51,7 +51,9 @@ function PostList({
                   icon={<UserOutlined />}
                   style={{ backgroundColor: "#577594" }}
                 />
-                <span className="m-1 ">{post.postedBy.name}</span>
+                <Link href={`/user/${post.postedBy.username}`}>
+                  <a className="m-1 ">{post.postedBy.name}</a>
+                </Link>
               </span>
               <span className="text-muted" style={{ fontSize: "12px" }}>
                 {moment(post.createdAt).fromNow()}

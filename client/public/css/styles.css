@@ -79,3 +79,11 @@ img {
 .css-sghohy-MuiButtonBase-root-MuiButton-root {
   box-shadow: 0 0 0;
 }
+
+span a {
+  color: black;
+}
+
+span a:hover {
+  color: #1876d1;
+}

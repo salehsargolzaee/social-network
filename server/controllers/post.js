@@ -123,8 +123,8 @@ exports.newsFeed = async (req, res) => {
 
     const posts = await Post.find({ postedBy: { $in: following } })
       .skip((currentPage - 1) * showPerPage)
-      .populate("postedBy", "_id name photo")
-      .populate("comments.postedBy", "_id name photo")
+      .populate("postedBy", "_id name username photo")
+      .populate("comments.postedBy", "_id  name photo")
       .sort({ createdAt: -1 })
       .limit(showPerPage);
 

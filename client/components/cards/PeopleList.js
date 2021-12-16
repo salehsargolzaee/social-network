@@ -4,6 +4,7 @@ import moment from "moment";
 import { useRouter } from "next/router";
 import { Avatar, List } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import Link from "next/link";
 
 function PeopleList({ people, handleFollow, followStatus }) {
   const { state: loggedUser } = useContext(UserContext);
@@ -23,7 +24,11 @@ function PeopleList({ people, handleFollow, followStatus }) {
                   style={{ backgroundColor: "#577594" }}
                 />
               }
-              title={<div>{user.username}</div>}
+              title={
+                <Link href={`/user/${user.username}`}>
+                  <a>{user.username}</a>
+                </Link>
+              }
               description={
                 user.about ? user.about : user.name ? user.name : null
               }

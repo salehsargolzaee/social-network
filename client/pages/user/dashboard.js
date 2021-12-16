@@ -88,7 +88,7 @@ function Dashboard() {
         .get("/total-posts")
         .then(({ data }) => setTotalPosts(data))
         .catch((error) => {
-          console.log("Can't get total posts number =>", error.data.response);
+          console.log("Can't get total posts number =>", error);
         });
     }
   }, [loggedUser && loggedUser.token]);

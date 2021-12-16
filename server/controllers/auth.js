@@ -337,3 +337,15 @@ exports.userSearch = async (req, res) => {
     res.status(500).send("An error happened. Please try again");
   }
 };
+
+exports.getUser = async (req, res) => {
+  try {
+    const user = await User.findOne({ username: req.params.username }).select(
+      "-password -answer -question -updatedAt -__v"
+    );
+    res.json(user);
+  } catch (err) {
+    console.log("Error in finding user public profile => ", err);
+    res.status(500).send("An error happened. Please try again");
+  }
+};
