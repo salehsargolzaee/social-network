@@ -9,6 +9,7 @@ import { UserContext } from "../context/index";
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import MenuPopupState from "./MenuPopupState";
+import { Avatar } from "antd";
 
 function Nav() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -33,7 +34,9 @@ function Nav() {
         <Toolbar variant="dense">
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/">
-              <span style={{ cursor: "pointer" }}> Main Logo</span>
+              <a style={{ color: "white" }}>
+                <Avatar size={45} src="/images/logo2.png" />
+              </a>
             </Link>
           </Typography>
 

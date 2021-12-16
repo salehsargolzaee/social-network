@@ -140,9 +140,9 @@ function UsernameProfile() {
       {loading ? (
         <LoadingOutlined className="d-flex justify-content-center display-1 p-5 text-primary" />
       ) : (
-        <>
+        <div className="container-fluid container-custom">
           {/* <pre>{JSON.stringify(user, null, 4)}</pre> */}
-          <div className="d-flex justify-content-center m-3 pb-2">
+          <div className="d-flex justify-content-center p-3 pb-2">
             <Card
               hoverable
               cover={
@@ -150,7 +150,9 @@ function UsernameProfile() {
                   alt={user && user.name}
                   style={{ width: "23rem" }}
                   src={
-                    user && user.photo && user.photo.url ? user.photo.url : null
+                    user && user.photo && user.photo.url
+                      ? user.photo.url
+                      : "/images/defaultUser.png"
                   }
                 />
               }
@@ -195,7 +197,7 @@ function UsernameProfile() {
               </Button>
             </Dropdown>
           </div>
-        </>
+        </div>
       )}
     </>
   );
