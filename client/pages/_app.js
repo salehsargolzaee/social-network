@@ -12,8 +12,9 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
+
         <link
-          href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500&family=Licorice&display=swap"
           rel="stylesheet"
         />
 

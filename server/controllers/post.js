@@ -211,3 +211,16 @@ exports.totalPosts = async (req, res) => {
     res.status(500).send("Error in getting total posts");
   }
 };
+
+exports.posts = async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate("postedBy", "_id name username photo")
+      .sort({ createdAt: -1 })
+      .limit(10);
+    res.json(posts);
+  } catch (err) {
+    console.log("Error in getting posts for index page =>", err);
+    res.status(500).send("Error in getting posts for home page");
+  }
+};

@@ -7,6 +7,10 @@ body,
   font-weight: 500 !important;
 }
 
+.logo-name {
+  font-family: "Licorice", cursive !important;
+}
+
 img {
   width: 500px;
 }
@@ -37,6 +41,21 @@ img {
   text-shadow: 2px 2px 9px #ffffff;
   background-position-y: 80%;
 }
+
+/* .bg-default-image-index {
+  background: linear-gradient(
+      rgba(176, 204, 246, 0.2),
+      rgba(138, 138, 138, 0.1)
+    ),
+    url("/images/default.jpg");
+  background-attachment: fixed;
+  padding: 100px 0 75px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+  min-height: 100vh;
+  background-position-y: 270%;
+} */
 
 .container-custom {
   background-color: #f4f6f7;

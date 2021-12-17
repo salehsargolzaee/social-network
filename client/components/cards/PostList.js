@@ -15,6 +15,7 @@ import { UserContext } from "../../context";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import { toast } from "react-toastify";
 
 function PostList({
   posts,
@@ -83,7 +84,15 @@ function PostList({
                   ) : (
                     <HeartOutlined
                       onClick={() => {
-                        handleLikeAndUnlike(post._id, "like");
+                        if (loggedUser && loggedUser.token) {
+                          if (!commentCount) {
+                            router.push(`/post/${post._id}`);
+                          } else {
+                            handleLikeAndUnlike(post._id, "like");
+                          }
+                        } else {
+                          toast.info("Please login first");
+                        }
                       }}
                       className="text-danger pt-3 h5 me-2 pb-1 "
                     />
@@ -101,7 +110,17 @@ function PostList({
                   </span>
 
                   <CommentOutlined
-                    onClick={() => handleComment(post)}
+                    onClick={() => {
+                      if (loggedUser && loggedUser.token) {
+                        if (!commentCount) {
+                          router.push(`/post/${post._id}`);
+                        } else {
+                          handleComment(post);
+                        }
+                      } else {
+                        toast.info("Please login first");
+                      }
+                    }}
                     className="pt-3 ps-3 h5 me-2"
                   />
                   <Link href={`/post/${post._id}`}>
@@ -134,7 +153,11 @@ function PostList({
                         className="h5"
                       />
                       <DeleteOutlined
-                        onClick={() => setShowDeleteModal({ postId: post._id })}
+                        onClick={() => {
+                          if (commentCount)
+                            setShowDeleteModal({ postId: post._id });
+                          else router.push(`/post/${post._id}`);
+                        }}
                         className="ms-3 h5"
                       />
                     </span>

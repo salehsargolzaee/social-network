@@ -15,6 +15,7 @@ const {
   addComment,
   deleteComment,
   totalPosts,
+  posts,
 } = require("../controllers/post");
 
 //middlewares
@@ -38,6 +39,7 @@ router.post(
 router.get("/news-feed/:page", requireSignin, newsFeed);
 router.get("/user-post/:id", requireSignin, getUserPostById);
 router.get("/total-posts", requireSignin, totalPosts);
+router.get("/posts", posts);
 
 // canModifyPost is a middleware which makes sure
 // user is trying to edit or delete his/her own post not others

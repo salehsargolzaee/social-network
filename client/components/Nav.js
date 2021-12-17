@@ -34,9 +34,19 @@ function Nav() {
         <Toolbar variant="dense">
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/">
-              <a style={{ color: "white" }}>
-                <Avatar size={45} src="/images/logo2.png" />
-              </a>
+              <h1
+                className="logo-name"
+                style={{
+                  fontSize: "22px",
+                  color: "white",
+                  position: "relative",
+                  top: "7px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+              >
+                IRIS
+              </h1>
             </Link>
           </Typography>
 
