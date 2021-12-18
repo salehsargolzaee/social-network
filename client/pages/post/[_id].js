@@ -130,17 +130,8 @@ function PostComments() {
   };
   return (
     <UserRoute>
-      <div className="container-fluid container-custom">
-        <div className="row bg-default-image py-5 text-ligth box-shadow">
-          <div className="col text-center">
-            <h1 style={{ color: "#4A6984" }}>
-              {loggedUser &&
-                loggedUser.user &&
-                `Welcome Back, ${loggedUser.user["name"]}`}
-            </h1>
-          </div>
-        </div>
-        <div className="col-md-8 offset-md-2">
+      <div className="row container-fluid container-custom">
+        <div className="col-md-8 offset-md-2" style={{ marginTop: "4rem" }}>
           {post && post.postedBy && (
             <PostList
               posts={[post]}

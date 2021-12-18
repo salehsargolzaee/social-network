@@ -77,7 +77,7 @@ function EditPost() {
       <div className="container-fluid container-custom">
         <div className="row bg-default-image py-5 text-ligth box-shadow">
           <div className="col text-center">
-            <h1 style={{ color: "#4A6984" }}>Edit</h1>
+            <h1 style={{ color: "#white" }}>Edit</h1>
           </div>
         </div>
         <div className="row py-5">

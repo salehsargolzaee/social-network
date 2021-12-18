@@ -75,7 +75,7 @@ function Following() {
         <LoadingOutlined className="d-flex justify-content-center display-1 p-5 text-primary" />
       ) : (
         <>
-          <div className="row m-3">
+          <div className="row" style={{ position: "relative", top: "60px" }}>
             <div className="col-md-10 offset-md-1 col-sm-10 offset-sm-1">
               <PeopleList
                 people={followedPeople}
@@ -84,7 +84,10 @@ function Following() {
               />
             </div>
           </div>
-          <div className="d-flex justify-content-center m-2">
+          <div
+            className="d-flex justify-content-center m-4"
+            style={{ position: "relative", top: "60px" }}
+          >
             <Dropdown overlay={menu}>
               <Button>
                 Go to <DownOutlined />

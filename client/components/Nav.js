@@ -29,24 +29,32 @@ function Nav() {
   }, [process.browser && window.location.pathname]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="primary">
+    <Box
+      sx={{ flexGrow: 1 }}
+      style={{
+        zIndex: "5",
+        position: "fixed",
+        width: "100%",
+      }}
+    >
+      <AppBar
+        position="static"
+        style={{ background: "#F3F6F7", color: "#728FC8" }}
+      >
         <Toolbar variant="dense">
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link href="/">
-              <h1
+              <a
                 className="logo-name"
                 style={{
                   fontSize: "22px",
-                  color: "white",
-                  position: "relative",
-                  top: "7px",
+                  color: "#728FC8",
+
                   fontWeight: "bold",
-                  cursor: "pointer",
                 }}
               >
                 IRIS
-              </h1>
+              </a>
             </Link>
           </Typography>
 

@@ -3,18 +3,16 @@ function ParallaxBg({ url, children }) {
     <div
       className="container-fluid "
       style={{
-        backgroundImage: `linear-gradient(
-        rgba(176, 204, 246, 0.4),
-        rgba(138, 138, 138, 0.3)
-        ),url(${url})`,
+        background: `linear-gradient(0deg, rgba(0, 0, 150, 0.3), rgba(24, 118, 209, 0)),url(${url})`,
         backgroundAttachment: "fixed",
         padding: "100px 0 75px",
         backgroundPosition: "center center",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        height: "40vh",
-        backgroundPositionY: "275%",
+        height: "80vh",
+        backgroundPositionY: "20%",
         display: "block",
+        backdropFilter: "blur(100px)",
       }}
     >
       {children}

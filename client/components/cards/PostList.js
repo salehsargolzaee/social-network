@@ -37,7 +37,10 @@ function PostList({
     <>
       {posts &&
         posts.map((post) => (
-          <div key={post._id} className="card my-4">
+          <div
+            key={post._id}
+            className={commentCount ? "card my-4" : "card-shadow card my-4"}
+          >
             <div className="card-header d-flex align-items-center justify-content-between">
               <span>
                 <Avatar

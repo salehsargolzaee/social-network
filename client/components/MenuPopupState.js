@@ -12,10 +12,11 @@ export default function MenuPopupState({ name, handleLogout, currentPage }) {
       {(popupState) => (
         <React.Fragment>
           <Button
-            color="primary"
+            style={{ background: "#F3F6F7", color: "#728FC8" }}
             variant="contained"
             className={
-              currentPage === "/user/dashboard"
+              currentPage === "/user/dashboard" ||
+              currentPage === "/user/profile/update"
                 ? "active ms-2 mb-1"
                 : "ms-2 mb-1"
             }
