@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 
 function Home({ posts }) {
   const router = useRouter();
+  const { state: loggedUser } = useContext(UserContext);
 
   return (
     <div className="container-custom">
@@ -33,27 +34,38 @@ function Home({ posts }) {
           >
             share the joy with others
           </h3>
-          <div
-            className="btn btn-md btn-outline-light mx-4 px-4"
-            onClick={() => router.push("/login")}
-          >
-            Login
-          </div>
-          <div
-            className="btn btn-md me-4 btn-outline-light"
-            onClick={() => router.push("/register")}
-          >
-            Register
-          </div>
+          {loggedUser && loggedUser.token ? (
+            <div
+              className="btn btn-md btn-outline-light mx-4 px-5 py-2"
+              onClick={() => router.push("/user/dashboard")}
+            >
+              Share a post
+            </div>
+          ) : (
+            <>
+              <div
+                className="btn btn-md btn-outline-light mx-4 px-4"
+                onClick={() => router.push("/login")}
+              >
+                Login
+              </div>
+              <div
+                className="btn btn-md me-4 btn-outline-light"
+                onClick={() => router.push("/register")}
+              >
+                Register
+              </div>
+            </>
+          )}
         </div>
         {/* <pre>{JSON.stringify(posts, null, 4)}</pre> */}
       </ParallaxBg>
       <div className="container">
         <div className="row">
           {posts.map((post) => (
-            <div key={post._id} className="col-md-6">
+            <div key={post._id} className="col-lg-4 col-md-6">
               {" "}
-              <PostList posts={[post]} commentCount={0} />
+              <PostList posts={[post]} commentCount={0} disable={false} />
             </div>
           ))}
         </div>

@@ -72,6 +72,10 @@ img {
   background-color: #f4f6f7;
 }
 
+.MuiFilledInput-input {
+  background-color: white !important;
+}
+
 .container-custom select {
   background-color: #f4f6f7;
 }
@@ -114,4 +118,10 @@ span a {
 
 span a:hover {
   color: #1876d1;
+}
+
+div.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 70px;
 }

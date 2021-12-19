@@ -36,7 +36,9 @@ function UserRoute({ children }) {
   return loginOk ? (
     <>{children}</>
   ) : (
-    <LoadingOutlined className="d-flex justify-content-center display-1 p-5 text-primary" />
+    <div className="d-flex justify-content-center display-1 p-5 text-primary">
+      <LoadingOutlined style={{ marginTop: "10rem" }} />
+    </div>
   );
 }
 

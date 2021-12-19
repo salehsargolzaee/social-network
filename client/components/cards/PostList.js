@@ -10,12 +10,14 @@ import {
   DeleteOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../context";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { toast } from "react-toastify";
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 function PostList({
   posts,
@@ -23,6 +25,7 @@ function PostList({
   handleLikeAndUnlike,
   handleComment,
   commentCount = 5,
+  disable = true,
 }) {
   const { state: loggedUser } = useContext(UserContext);
   const router = useRouter();
@@ -32,6 +35,11 @@ function PostList({
     fontSize: "13px",
     color: "#6C757D",
   });
+  useEffect(() => {
+    Aos.init({
+      disable,
+    });
+  }, []);
 
   return (
     <>
@@ -39,6 +47,10 @@ function PostList({
         posts.map((post) => (
           <div
             key={post._id}
+            data-aos="fade-zoom-in"
+            data-aos-offset="80"
+            data-aos-easing="ease-in-sine"
+            data-aos-duration="380"
             className={commentCount ? "card my-4" : "card-shadow card my-4"}
           >
             <div className="card-header d-flex align-items-center justify-content-between">
@@ -65,7 +77,10 @@ function PostList({
             </div>
             <div className="card-body">
               {post.image ? (
-                <PostImage src={post.image.url} />
+                <PostImage
+                  src={post.image.url}
+                  height={commentCount ? "500px" : "300px"}
+                />
               ) : (
                 renderHTML(post.content)
               )}

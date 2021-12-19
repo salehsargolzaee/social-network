@@ -217,7 +217,7 @@ exports.posts = async (req, res) => {
     const posts = await Post.find()
       .populate("postedBy", "_id name username photo")
       .sort({ createdAt: -1 })
-      .limit(10);
+      .limit(12);
     res.json(posts);
   } catch (err) {
     console.log("Error in getting posts for index page =>", err);

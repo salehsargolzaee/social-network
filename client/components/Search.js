@@ -109,10 +109,12 @@ function Search({ handleFollow }) {
 
   return (
     <div>
-      <Box sx={{ display: "flex", alignItems: "flex-end" }} className="mb-4">
+      <Box sx={{ display: "flex", alignItems: "flex-end" }} className="mb-4 ">
         <AccountCircle
           // sx={{ color: "action.active", mr: 1, my: 0.5 }}
-          style={{ backgroudColor: "#577594" }}
+          // style={{
+          //   /*backgroudColor: "#577594"*/
+          // }}
           color={iconColor.account}
         />
         <TextField

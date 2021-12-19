@@ -1,4 +1,4 @@
-function PostImage({ src }) {
+function PostImage({ src, height }) {
   return (
     <div
       style={{
@@ -6,7 +6,7 @@ function PostImage({ src }) {
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center center",
         backgroundSize: "cover",
-        height: "500px",
+        height: height,
       }}
     />
   );

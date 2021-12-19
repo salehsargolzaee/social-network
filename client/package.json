@@ -18,6 +18,7 @@
     "@mui/icons-material": "^5.0.1",
     "@mui/material": "^5.0.2",
     "antd": "^4.16.13",
+    "aos": "^2.3.4",
     "axios": "^0.22.0",
     "bootstrap": "^5.1.1",
     "material-ui-popup-state": "^2.0.0",

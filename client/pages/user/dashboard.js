@@ -42,6 +42,7 @@ function Dashboard() {
 
   // loading spinner for post fetching delay
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
+  const [isLoadingPeople, setIsLoadingPeople] = useState(false);
 
   // total posts in database for pagination
   const [totalPosts, setTotalPosts] = useState(0);
@@ -63,11 +64,14 @@ function Dashboard() {
   };
 
   const findPeople = async () => {
+    setIsLoadingPeople(true);
     try {
       const { data } = await axios.get("/find-people");
       setSuggestedPeople(data);
+      setIsLoadingPeople(false);
     } catch (err) {
       console.log(err);
+      setIsLoadingPeople(false);
     }
   };
 
@@ -267,7 +271,7 @@ function Dashboard() {
             </h1>
           </div>
         </div>
-        <div className="row py-3">
+        <div className="row py-3 ">
           <div className="col-md-8">
             <PostForm
               postContent={postContent}
@@ -287,7 +291,7 @@ function Dashboard() {
                 handleComment={handleComment}
               />
             )}
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center mb-2">
               <Pagination
                 defaultCurrent={pageNumber}
                 current={pageNumber}
@@ -298,20 +302,29 @@ function Dashboard() {
             </div>
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
-          <div className="col-md-4">
-            <Search handleFollow={handleFollow} />
-            {loggedUser && loggedUser.user && loggedUser.user.following && (
-              <Link href={`/user/following`}>
-                <a style={{ color: "#1876D1" }}>
-                  {loggedUser.user.following.length} Following
-                </a>
-              </Link>
-            )}
-            <PeopleList
-              people={suggestedPeople}
-              handleFollow={handleFollow}
-              followStatus="dashboard"
-            />
+          <div className="col-md-4 ">
+            <div className="sticky card p-4">
+              <Search handleFollow={handleFollow} />
+              {loggedUser && loggedUser.user && loggedUser.user.following && (
+                <Link href={`/user/following`}>
+                  <a style={{ color: "#1876D1" }}>
+                    {loggedUser.user.following.length} Following
+                  </a>
+                </Link>
+              )}
+              {isLoadingPeople ? (
+                <LoadingOutlined
+                  className="d-flex justify-content-center  p-5 text-primary"
+                  style={{ fontSize: "15px" }}
+                />
+              ) : (
+                <PeopleList
+                  people={suggestedPeople}
+                  handleFollow={handleFollow}
+                  followStatus="dashboard"
+                />
+              )}
+            </div>
           </div>
         </div>
         <DeleteModal
