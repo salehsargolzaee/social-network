@@ -9,6 +9,14 @@ const morgan = require("morgan");
 const { readdirSync } = require("fs");
 
 const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http, {
+  cors: {
+    origin: [process.env.CLIENT_URL],
+    methods: ["GET", "POST"],
+    allowedHeaders: ["Content-type"],
+  },
+});
 
 // Database connection
 mongoose.connect(process.env.DATABASE, (err) => {
@@ -25,7 +33,7 @@ app.use(express.json({ limit: "5mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: [process.env.CLIENT_URL],
   })
 );
 
@@ -33,8 +41,18 @@ app.use(
 
 readdirSync("./routes").map((rt) => app.use("/api", require(`./routes/${rt}`)));
 
+// socketio
+
+io.on("connect", (socket) => {
+  // console.log("socket.io =>", socket.id);
+  socket.on("new-post", (post) => {
+    // console.log("New post =>", post);
+    socket.broadcast.emit("new-post", post);
+  });
+});
+
 const port = process.env.PORT || 8000;
 
-app.listen(port, () => {
+http.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

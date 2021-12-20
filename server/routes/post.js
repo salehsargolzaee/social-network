@@ -31,7 +31,7 @@ router.post("/create-post", requireSignin, createPost);
 router.post(
   "/upload-image",
   requireSignin,
-  formidable({ maxFileSize: 10 * 1024 * 1024 }),
+  formidable({ maxFileSize: 20 * 1024 * 1024 }),
   uploadImage
 );
 

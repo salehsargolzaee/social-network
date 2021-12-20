@@ -13,6 +13,11 @@ import Link from "next/link";
 import DeleteModal from "../../components/modals/DeleteModal";
 import CommentModal from "../../components/modals/CommentModal";
 import Search from "../../components/Search";
+import io from "socket.io-client";
+
+const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
+  reconnection: true,
+});
 
 function Dashboard() {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -110,6 +115,7 @@ function Dashboard() {
       setPostImage({});
       newsFeed();
       setPageNumber(1);
+      socket.emit("new-post", data);
     } catch (error) {
       toast.error(error.response.data);
     }
@@ -271,6 +277,7 @@ function Dashboard() {
             </h1>
           </div>
         </div>
+
         <div className="row py-3 ">
           <div className="col-md-8">
             <PostForm

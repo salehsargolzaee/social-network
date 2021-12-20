@@ -24,7 +24,13 @@ exports.createPost = async (req, res) => {
       image: postImage,
     });
 
-    await post.save().then((posted) => res.json(posted));
+    await post.save().then(async (posted) => {
+      const postWithPostedBy = await Post.findById(posted._id).populate(
+        "postedBy",
+        "_id name username photo"
+      );
+      res.json(postWithPostedBy);
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send("An error happened. Please try again");

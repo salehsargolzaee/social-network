@@ -48,7 +48,7 @@ function PostList({
           <div
             key={post._id}
             data-aos="fade-zoom-in"
-            data-aos-offset="80"
+            data-aos-offset="40"
             data-aos-easing="ease-in-sine"
             data-aos-duration="380"
             className={commentCount ? "card my-4" : "card-shadow card my-4"}
