@@ -23,6 +23,7 @@ const {
   requireSignin,
   canModifyPost,
   canModifyComment,
+  isAdmin,
 } = require("../middlewares");
 
 const router = express.Router();
@@ -35,7 +36,6 @@ router.post(
   uploadImage
 );
 
-// router.get("/user-posts", requireSignin, userPosts);
 router.get("/news-feed/:page", requireSignin, newsFeed);
 router.get("/user-post/:id", requireSignin, getUserPostById);
 router.get("/total-posts", requireSignin, totalPosts);
@@ -51,5 +51,9 @@ router.put("/add-comment", requireSignin, addComment);
 router.put("/delete-comment", requireSignin, canModifyComment, deleteComment);
 
 router.delete("/delete-post/:id", requireSignin, canModifyPost, deletePost);
+
+// admin
+router.delete("/admin/delete-post/:id", requireSignin, isAdmin, deletePost);
+router.get("/admin/posts", requireSignin, isAdmin, userPosts);
 
 module.exports = router;

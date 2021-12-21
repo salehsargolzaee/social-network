@@ -52,21 +52,6 @@ exports.uploadImage = async (req, res) => {
   }
 };
 
-// exports.userPosts = async (req, res) => {
-//   try {
-//     // await Post.find({ postedBy: req.user._id })
-//     const posts = await Post.find()
-//       .populate("postedBy", "_id name photo")
-//       .sort({ createdAt: -1 })
-//       .limit(10);
-//     // console.log("posts => ", posts);
-//     res.json(posts);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(500).send("Posts can't be rendered.");
-//   }
-// };
-
 exports.getUserPostById = async (req, res) => {
   try {
     const post = await Post.findById(req.params.id)
@@ -228,5 +213,18 @@ exports.posts = async (req, res) => {
   } catch (err) {
     console.log("Error in getting posts for index page =>", err);
     res.status(500).send("Error in getting posts for home page");
+  }
+};
+
+exports.userPosts = async (req, res) => {
+  try {
+    // await Post.find({ postedBy: req.user._id })
+    const posts = await Post.find()
+      .populate("postedBy", "_id name username photo")
+      .sort({ createdAt: -1 });
+    res.json(posts);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Posts can't be rendered for admin.");
   }
 };

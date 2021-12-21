@@ -30,10 +30,7 @@ function Home({ posts }) {
   const head = () => {
     return (
       <Head>
-        <title>
-          Iris - a simple social network using MongoDb, Express, NodeJs and
-          NextJs
-        </title>
+        <title>Iris - a simple social network </title>
         <meta
           name="description"
           content="A simple social network using MongoDb, Express, NodeJs and NextJs by Saleh Sargolzaee"

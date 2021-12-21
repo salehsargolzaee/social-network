@@ -33,8 +33,6 @@ function Dashboard() {
 
   const [suggestedPeople, setSuggestedPeople] = useState([]);
 
-  const [userCount, setUserCount] = useState(0);
-
   // if modal showing the value of this state will be {post:_id } of target post
   // or {comment:_id} of target comment
   const [showDeleteModal, setShowDeleteModal] = useState(false);

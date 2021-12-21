@@ -12,7 +12,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
-    question: "What is your best friend's name ?",
+    question: "What is the name of your first teacher ?",
     answer: "",
   });
   // ok shows if is it ok to display modal or not
@@ -39,7 +39,7 @@ function Register() {
         name: "",
         email: "",
         password: "",
-        question: "What is your best friend's name ?",
+        question: "What is the name of your first teacher ?",
         answer: "",
       });
       setLoading(false);

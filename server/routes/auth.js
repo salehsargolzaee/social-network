@@ -21,6 +21,7 @@ const {
   requireSignin,
   addFollower,
   removeFollower,
+  isAdmin,
 } = require("../middlewares");
 
 const router = express.Router();
@@ -41,5 +42,8 @@ router.put("/profile-update", requireSignin, profileUpdate);
 router.put("/follow-user", requireSignin, addFollower, followUser);
 
 router.put("/unfollow-user", requireSignin, removeFollower, unfollowUser);
+
+// admin
+router.get("/current-admin", requireSignin, isAdmin, currentUser);
 
 module.exports = router;

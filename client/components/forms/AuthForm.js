@@ -116,9 +116,11 @@ function AuthForm({
               onChange={handleChange}
               value={userInformation.question}
             >
-              <option>What is your best friend's name ?</option>
-              <option>What is your favourite book ?</option>
-              <option>What is the name of your favourite city ?</option>
+              <option>What is the name of your first teacher ?</option>
+              <option>What is the name of your first pet ?</option>
+              <option>
+                What are the last five digits of your driver's license number ?
+              </option>
             </select>
             <small className="form-text text-muted">
               You can answer this question to reset your password if forgotten.
