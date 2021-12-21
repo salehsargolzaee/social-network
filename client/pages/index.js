@@ -6,6 +6,12 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import io from "socket.io-client";
+import {
+  GithubOutlined,
+  LinkedinFilled,
+  MailOutlined,
+  HeartOutlined,
+} from "@ant-design/icons";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
   reconnection: true,
@@ -15,7 +21,11 @@ function Home({ posts }) {
   const router = useRouter();
   const { state: loggedUser } = useContext(UserContext);
   const [allPosts, setAllPosts] = useState(posts);
-
+  const [anchorColor, setAnchorColor] = useState({
+    git: "white",
+    link: "white",
+    gmail: "white",
+  });
   useEffect(() => {
     // console.log("socketIo =>", socket);
     socket.on("new-post", (newPost) => {
@@ -111,6 +121,66 @@ function Home({ posts }) {
               </div>
             ))}
           </div>
+        </div>
+        <div
+          className="container-fluid text-center text-light"
+          style={{
+            background:
+              "linear-gradient(0deg, rgba(112, 144, 198, 0.7), rgba(192, 195, 211, 0.8))",
+            // backgroundColor: "#5F8BC2",
+            padding: "5% 10%",
+            marginTop: "2%",
+          }}
+        >
+          <div style={{ fontSize: "1.2rem" }} className="pb-4">
+            <a
+              href="https://github.com/salehsargolzaee"
+              onMouseEnter={() =>
+                setAnchorColor((prev) => ({ ...prev, git: "black" }))
+              }
+              onMouseLeave={() =>
+                setAnchorColor((prev) => ({ ...prev, git: "white" }))
+              }
+              style={{ color: anchorColor.git }}
+              target="_blank"
+            >
+              <GithubOutlined className="px-2" />
+            </a>
+            <a
+              href="https://www.linkedin.com/in/saleh-sargolzaee-819ba119a/"
+              onMouseEnter={() =>
+                setAnchorColor((prev) => ({ ...prev, link: "#5677ad" }))
+              }
+              onMouseLeave={() =>
+                setAnchorColor((prev) => ({ ...prev, link: "white" }))
+              }
+              style={{ color: anchorColor.link }}
+              target="_blank"
+            >
+              <LinkedinFilled className="px-2" />
+            </a>
+            <a
+              href="mailto:salehsargolzaee@gmail.com"
+              onMouseEnter={() =>
+                setAnchorColor((prev) => ({ ...prev, gmail: "#CA3A2E" }))
+              }
+              onMouseLeave={() =>
+                setAnchorColor((prev) => ({ ...prev, gmail: "white" }))
+              }
+              style={{ color: anchorColor.gmail }}
+              target="_blank"
+            >
+              <MailOutlined className="px-2" />
+            </a>
+          </div>
+          <span>
+            Made with{" "}
+            <HeartOutlined
+              className=" px-1"
+              style={{ position: "relative", bottom: "4.5px" }}
+            />{" "}
+            by Saleh Sargolzaee
+          </span>
         </div>
       </div>
     </>
