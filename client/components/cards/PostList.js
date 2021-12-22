@@ -95,7 +95,15 @@ function PostList({
                   post.likes.includes(loggedUser.user._id) ? (
                     <HeartFilled
                       onClick={() => {
-                        handleLikeAndUnlike(post._id, "unlike");
+                        if (loggedUser && loggedUser.token) {
+                          if (!commentCount) {
+                            router.push(`/post/${post._id}`);
+                          } else {
+                            handleLikeAndUnlike(post._id, "unlike");
+                          }
+                        } else {
+                          toast.info("Please login first");
+                        }
                       }}
                       className="text-danger pt-3 h5 me-2 pb-1 "
                     />
