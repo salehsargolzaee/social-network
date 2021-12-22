@@ -13,6 +13,7 @@ import { Dropdown, Button, Menu, Avatar, Card } from "antd";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import moment from "moment";
+import UserCard from "../../components/cards/UserCard";
 
 const { Meta } = Card;
 
@@ -147,55 +148,7 @@ function UsernameProfile() {
               className="d-flex justify-content-center p-3 pb-2"
               style={{ marginTop: "4rem" }}
             >
-              <Card
-                hoverable
-                cover={
-                  <img
-                    alt={user && user.name}
-                    style={{ width: "23rem" }}
-                    src={
-                      user && user.photo && user.photo.url
-                        ? user.photo.url
-                        : "/images/defaultUser.png"
-                    }
-                  />
-                }
-                actions={
-                  loggedUser &&
-                  loggedUser.user &&
-                  loggedUser.user._id !== user._id &&
-                  (loggedUser.user.following.includes(user._id)
-                    ? [followOptions("Unfollow")]
-                    : loggedUser.user.followers.includes(user._id)
-                    ? [followOptions("Follow back")]
-                    : [followOptions("Follow")])
-                }
-              >
-                <Meta
-                  avatar={
-                    <Avatar
-                      src={user && user.photo && user.photo.url}
-                      icon={<UserOutlined />}
-                    ></Avatar>
-                  }
-                  title={user && user.name}
-                  description={user && user.about}
-                />
-                <p
-                  className="pt-3 ps-2 text-muted"
-                  style={{ fontSize: "11px" }}
-                >
-                  Joined {moment(user.createdAt).fromNow()}
-                </p>
-                <div className="d-flex justify-content-between pt-4">
-                  <span className="btn btn-sm">
-                    {user && user.followers && user.followers.length} Followers
-                  </span>
-                  <span className="btn btn-sm">
-                    {user && user.following && user.following.length} Following
-                  </span>
-                </div>
-              </Card>
+              <UserCard user={user} followOptions={followOptions} />
             </div>
             <div className="d-flex justify-content-center m-2">
               <Dropdown overlay={menu}>

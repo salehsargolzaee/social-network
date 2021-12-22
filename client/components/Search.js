@@ -38,7 +38,7 @@ function Search({ handleFollow }) {
             if (loggedUser.user.following.includes(person._id)) {
               return "Unfollow";
             } else if (loggedUser.user.followers.includes(person._id)) {
-              return "Follow Back ";
+              return "Follow Back";
             } else if (loggedUser.user._id === person._id) {
               return "You";
             } else {
@@ -180,6 +180,7 @@ function Search({ handleFollow }) {
               setFollowStatus([]);
             }}
           />
+
           {searchResult.map((person, index) => (
             <PeopleList
               key={person._id}
@@ -194,6 +195,7 @@ function Search({ handleFollow }) {
               followStatus={followStatus[index]}
             />
           ))}
+          <hr />
         </>
       )}
     </div>

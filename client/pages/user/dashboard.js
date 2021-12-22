@@ -9,11 +9,11 @@ import PostList from "../../components/cards/PostList";
 import { Pagination } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import PeopleList from "../../components/cards/PeopleList";
-import Link from "next/link";
 import DeleteModal from "../../components/modals/DeleteModal";
 import CommentModal from "../../components/modals/CommentModal";
 import Search from "../../components/Search";
 import io from "socket.io-client";
+import UserCard from "../../components/cards/UserCard";
 
 const socket = io(process.env.NEXT_PUBLIC_SOCKETIO, {
   reconnection: true,
@@ -308,15 +308,16 @@ function Dashboard() {
           </div>
           {/* <pre>{JSON.stringify(userPosts, null, 4)}</pre> */}
           <div className="col-md-4 ">
-            <div className="sticky card p-4">
+            {loggedUser && loggedUser.user && (
+              <div className="mb-2 border">
+                <UserCard user={loggedUser.user} showPhoto={false} />
+              </div>
+            )}
+            <div
+              className="sticky card p-4"
+              style={{ maxHeight: "700px", overflow: "scroll" }}
+            >
               <Search handleFollow={handleFollow} />
-              {loggedUser && loggedUser.user && loggedUser.user.following && (
-                <Link href={`/user/following`}>
-                  <a style={{ color: "#1876D1" }}>
-                    {loggedUser.user.following.length} Following
-                  </a>
-                </Link>
-              )}
               {isLoadingPeople ? (
                 <LoadingOutlined
                   className="d-flex justify-content-center  p-5 text-primary"

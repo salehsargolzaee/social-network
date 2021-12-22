@@ -307,6 +307,21 @@ exports.userFollowing = async (req, res) => {
   }
 };
 
+exports.userFollowers = async (req, res) => {
+  try {
+    const { followers } = await User.findById(req.user._id);
+
+    const followersUsers = await User.find({ _id: { $in: followers } }).limit(
+      150
+    );
+
+    res.json(followersUsers);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("An error happened. Please try again");
+  }
+};
+
 exports.userSearch = async (req, res) => {
   const { query } = req.params;
 

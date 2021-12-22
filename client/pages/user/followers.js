@@ -23,17 +23,17 @@ const menu = (
     </Menu.Item>
   </Menu>
 );
-function Following() {
-  const [followedPeople, setFollowedPeople] = useState([]);
+function Followers() {
+  const [followers, setFollowers] = useState([]);
   const [loading, setLoading] = useState(false);
   const { state: loggedUser, setState: setLoggedUser } =
     useContext(UserContext);
 
-  const fetchFollowedPeople = async () => {
+  const fetchFollowers = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get("/user-following");
-      setFollowedPeople(data);
+      const { data } = await axios.get("/user-followers");
+      setFollowers(data);
       setLoading(false);
     } catch (error) {
       console.log(error);
@@ -55,18 +55,35 @@ function Following() {
 
       setLoggedUser((prev) => ({ ...prev, user: data }));
 
-      setFollowedPeople(
-        followedPeople.filter((person) => person._id !== user._id)
-      );
       toast.success(`Unfollowed ${user.name}`);
     } catch (error) {
       console.log(error);
       toast.error(error.response.data);
     }
   };
+  const handleFollow = async (user) => {
+    // console.log("Want to follow this user =>", userId);
+    try {
+      const { data } = await axios.put("/follow-user", { _id: user._id });
+
+      // console.log(data);
+
+      // update user in local storage
+      const auth = JSON.parse(window.localStorage.getItem("auth"));
+      auth.user = data;
+      window.localStorage.setItem("auth", JSON.stringify(auth));
+
+      // update context
+      setLoggedUser((prev) => ({ ...prev, user: data }));
+
+      toast.success(`You have followed ${user.name}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    if (loggedUser && loggedUser.token) fetchFollowedPeople();
+    if (loggedUser && loggedUser.token) fetchFollowers();
   }, [loggedUser && loggedUser.token]);
 
   return (
@@ -79,12 +96,20 @@ function Following() {
             className="row px-4"
             style={{ position: "relative", top: "60px" }}
           >
-            <div className="col-md-10 offset-md-1 col-sm-10 offset-sm-1">
-              <PeopleList
-                people={followedPeople}
-                handleFollow={handleUnFollow}
-                followStatus="Unfollow"
-              />
+            <div className="col-md-10 offset-md-1 col-sm-10 offset-sm-1 ">
+              {followers.map((person) => {
+                const isFollowed = loggedUser.user.following.includes(
+                  person._id
+                );
+                return (
+                  <PeopleList
+                    key={person._id}
+                    people={[person]}
+                    handleFollow={isFollowed ? handleUnFollow : handleFollow}
+                    followStatus={isFollowed ? "Unfollow" : "Follow Back"}
+                  />
+                );
+              })}
             </div>
           </div>
           <div
@@ -103,4 +128,4 @@ function Following() {
   );
 }
 
-export default Following;
+export default Followers;

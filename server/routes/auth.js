@@ -14,6 +14,7 @@ const {
   unfollowUser,
   userSearch,
   getUser,
+  userFollowers,
 } = require("../controllers/auth");
 
 //middlewares
@@ -34,6 +35,7 @@ router.post("/forgot-password", forgotPassword);
 router.get("/current-user", requireSignin, currentUser);
 router.get("/find-people", requireSignin, findPeople);
 router.get("/user-following", requireSignin, userFollowing);
+router.get("/user-followers", requireSignin, userFollowers);
 router.get("/user-search/:query", userSearch);
 router.get("/user/:username", getUser);
 
