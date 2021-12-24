@@ -1,4 +1,4 @@
-import { userState, useContext, useState } from "react";
+import { useRef, useContext, useState } from "react";
 import { UserContext } from "../context";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -8,6 +8,7 @@ import axios from "axios";
 import PeopleList from "../components/cards/PeopleList";
 import { toast } from "react-toastify";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import { useDebounce } from "react-use";
 
 function Search({ handleFollow }) {
   const { state: loggedUser, setState: setLoggedUser } =
@@ -22,6 +23,17 @@ function Search({ handleFollow }) {
     search: "disabled",
   });
 
+  const buttonRef = useRef();
+
+  useDebounce(
+    () => {
+      if (buttonRef.current) {
+        buttonRef.current.click();
+      }
+    },
+    100,
+    [searchValue]
+  );
   const searchForUser = async () => {
     // console.log(`Find ${searchValue} from database`);
 
@@ -47,8 +59,6 @@ function Search({ handleFollow }) {
           })
         );
       }
-
-      setSearchValue("");
     } catch (error) {
       console.log("Error in user search=> ", error);
     }
@@ -118,6 +128,7 @@ function Search({ handleFollow }) {
           color={iconColor.account}
         />
         <TextField
+          autoComplete="off"
           id="input-with-sx"
           label="User Search"
           variant="filled"
@@ -139,23 +150,28 @@ function Search({ handleFollow }) {
             }
           }}
         />
-        <SearchIcon
-          style={{
-            cursor: "pointer",
-            marginBottom: "1px",
-            marginRight: "10px",
-          }}
-          color={iconColor.search}
-          onMouseEnter={() => {
-            if (searchValue)
-              setIconColor((prev) => ({ ...prev, search: "primary" }));
-          }}
-          onMouseLeave={() => {
-            if (iconColor.account === "disabled")
-              setIconColor((prev) => ({ ...prev, search: "disabled" }));
-          }}
+        <button
+          ref={buttonRef}
           onClick={searchValue ? searchForUser : null}
-        />
+          className="bg-transparent border-0"
+        >
+          <SearchIcon
+            style={{
+              cursor: "pointer",
+              marginBottom: "1px",
+              marginRight: "10px",
+            }}
+            color={iconColor.search}
+            onMouseEnter={() => {
+              if (searchValue)
+                setIconColor((prev) => ({ ...prev, search: "primary" }));
+            }}
+            onMouseLeave={() => {
+              if (iconColor.account === "disabled")
+                setIconColor((prev) => ({ ...prev, search: "disabled" }));
+            }}
+          />
+        </button>
       </Box>
       {searchResult.length === 1 && searchResult[0].notFound && (
         <div className="d-flex justify-content-center text-muted">
