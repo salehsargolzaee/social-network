@@ -344,7 +344,7 @@ exports.userSearch = async (req, res) => {
           },
         },
       ],
-    }).select("_id name photo about username");
+    }).select("_id name photo about username role");
 
     res.json(user);
   } catch (err) {

@@ -38,7 +38,8 @@ function Search({ handleFollow }) {
     // console.log(`Find ${searchValue} from database`);
 
     try {
-      const { data } = await axios.get(`/user-search/${searchValue}`);
+      let { data } = await axios.get(`/user-search/${searchValue}`);
+      data = data.filter((usr) => usr.role !== "Admin");
       // console.log("user search response=> ", data);
       if (!data.length) {
         data.push({ notFound: 1 });

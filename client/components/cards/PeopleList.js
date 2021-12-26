@@ -14,36 +14,39 @@ function PeopleList({ people, handleFollow, followStatus }) {
     <>
       <List
         dataSource={people}
-        renderItem={(user) => (
-          <List.Item>
-            <List.Item.Meta
-              avatar={
-                <Avatar
-                  src={user.photo && user.photo.url && user.photo.url}
-                  icon={<UserOutlined />}
-                  style={{ backgroundColor: "#577594" }}
-                />
-              }
-              title={
-                <Link href={`/user/${user.username}`}>
-                  <a>{user.username}</a>
-                </Link>
-              }
-              description={
-                user.about ? user.about : user.name ? user.name : null
-              }
-            />
+        renderItem={(user) =>
+          user &&
+          user.role !== "Admin" && (
+            <List.Item>
+              <List.Item.Meta
+                avatar={
+                  <Avatar
+                    src={user.photo && user.photo.url && user.photo.url}
+                    icon={<UserOutlined />}
+                    style={{ backgroundColor: "#577594" }}
+                  />
+                }
+                title={
+                  <Link href={`/user/${user.username}`}>
+                    <a>{user.username}</a>
+                  </Link>
+                }
+                description={
+                  user.about ? user.about : user.name ? user.name : null
+                }
+              />
 
-            <button
-              className="btn btn-outline-primary btn-sm"
-              onClick={() => {
-                if (handleFollow) handleFollow(user);
-              }}
-            >
-              {followStatus === "dashboard" ? "Follow" : `${followStatus}`}
-            </button>
-          </List.Item>
-        )}
+              <button
+                className="btn btn-outline-primary btn-sm"
+                onClick={() => {
+                  if (handleFollow) handleFollow(user);
+                }}
+              >
+                {followStatus === "dashboard" ? "Follow" : `${followStatus}`}
+              </button>
+            </List.Item>
+          )
+        }
       />
     </>
   );
