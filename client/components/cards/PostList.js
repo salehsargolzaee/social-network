@@ -195,8 +195,8 @@ function PostList({
               <div
                 className="list-group"
                 style={{
-                  maxHeight: "140px",
-                  overflow: "scroll",
+                  maxHeight: "150px",
+                  overflow: "auto",
                 }}
               >
                 {post.comments.slice(0, commentCount).map((comment) => (

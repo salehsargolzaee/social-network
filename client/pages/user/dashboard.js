@@ -315,7 +315,7 @@ function Dashboard() {
             )}
             <div
               className="sticky card p-4"
-              style={{ maxHeight: "700px", overflow: "scroll" }}
+              style={{ maxHeight: "700px", overflow: "auto" }}
             >
               <Search handleFollow={handleFollow} />
               {isLoadingPeople ? (
