@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="stylesheet" href="/css/styles.css" />
       </Head>
       <Nav />
-      <ToastContainer position="top-center" autoClose="4000" />
+      <ToastContainer position="top-center" autoClose="1500" />
       <Component {...pageProps} />
     </UserProvider>
   );

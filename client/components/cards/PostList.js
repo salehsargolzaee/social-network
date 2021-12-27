@@ -24,7 +24,7 @@ function PostList({
   setShowDeleteModal,
   handleLikeAndUnlike,
   handleComment,
-  commentCount = 5,
+  commentCount = 3,
   disable = true,
 }) {
   const { state: loggedUser } = useContext(UserContext);
@@ -251,7 +251,7 @@ function PostList({
                     </div>
                   </span>
                 ))}
-                {post.comments.length > 2 && commentCount === 5 && (
+                {post.comments.length > 3 && commentCount === 3 && (
                   <div className="list-group-item d-flex justify-content-center">
                     <Link href={`/post/${post._id}`}>
                       <a>

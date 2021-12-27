@@ -62,7 +62,7 @@ function PostComments() {
       if (data.err) {
         toast.error(data.err);
       } else {
-        if (loggedUser && loggedUser.token) newsFeed();
+        if (loggedUser && loggedUser.token) router.push("/user/dashboard");
         toast.success("Successfully deleted the post.");
       }
     } catch (error) {
