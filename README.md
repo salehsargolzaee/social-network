@@ -1,5 +1,6 @@
 [![Stargazers][stars-shield]](https://github.com/salehsargolzaee/social-network/stargazers)
 [![Issues][issues-shield]](https://github.com/salehsargolzaee/social-network/issues)
+[![Forks][forks-shield]][forks-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -14,7 +15,7 @@
 <h3  align="center">IRIS</h3>
 
   <p align="center">
-    This is a node.js social network powered by Express that provides some functions you'd expect from a simple social network.
+    This is a node.js social network powered by Express that provides some basic functionalities you'd expect from a simple social network.
      <br />
       .
      <br />
@@ -54,6 +55,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
+### Demo
+![Iris Social Network Demo](demo/demo.gif)
+
 ### Features
 
 * Register
@@ -80,7 +84,7 @@
 * [Material UI](https://mui.com/)
 * [Ant Design](https://ant.design/)
 
-### Demo
+
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -185,6 +189,8 @@ Project Link: [https://github.com/salehsargolzaee/social-network](https://github
 [stars-url]: https://github.com/salehsargolzaee/social-network/stargazers
 [issues-shield]: https://img.shields.io/github/issues/salehsargolzaee/social-network.svg?style=for-the-badge
 [issues-url]: https://github.com/salehsargolzaee/social-network/issues
+[forks-shield]: https://img.shields.io/github/forks/salehsargolzaee/social-network.svg?style=for-the-badge
+[forks-url]: https://github.com/salehsargolzaee/social-network/network/members
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/saleh-sargolzaee-819ba119a
 [product-screenshot]: images/screenshot.png
