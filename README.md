@@ -1,6 +1,4 @@
 [![Stargazers][stars-shield]](https://github.com/salehsargolzaee/social-network/stargazers)
-[![Issues][issues-shield]](https://github.com/salehsargolzaee/social-network/issues)
-[![Forks][forks-shield]][forks-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
 
@@ -187,10 +185,6 @@ Project Link: [https://github.com/salehsargolzaee/social-network](https://github
 <!-- MARKDOWN LINKS & IMAGES -->
 [stars-shield]: https://img.shields.io/github/stars/salehsargolzaee/social-network.svg?style=for-the-badge
 [stars-url]: https://github.com/salehsargolzaee/social-network/stargazers
-[issues-shield]: https://img.shields.io/github/issues/salehsargolzaee/social-network.svg?style=for-the-badge
-[issues-url]: https://github.com/salehsargolzaee/social-network/issues
-[forks-shield]: https://img.shields.io/github/forks/salehsargolzaee/social-network.svg?style=for-the-badge
-[forks-url]: https://github.com/salehsargolzaee/social-network/network/members
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/saleh-sargolzaee-819ba119a
 [product-screenshot]: images/screenshot.png
